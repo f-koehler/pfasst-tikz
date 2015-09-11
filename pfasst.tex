@@ -1,13 +1,44 @@
 \documentclass{scrartcl}
+
+% Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
 \usepackage{tikz}
 \usetikzlibrary{math}
 
+%%%%%%%%%%%%%%%%%
+% Configuration %
+%%%%%%%%%%%%%%%%%
+
+% config variables
 \tikzmath{
+  % with of each processor
   \procWidth = 2.5;
+  %
+  % spacing between processors (hspace)
   \procSpace = 0.25;
+  %
+  % spacing between blocks (vspace9
   \blockSpace = 0.25;
+  %
+  % height of coarse sweep blocks
   \coarseHeight = 0.6;
+  %
+  % height of fine sweep blocks
   \fineHeight = 3;
+}
+
+% draw functions for elements (blocks, lines, ...)
+\tikzmath{
+  % specify how coarse sweep blocks will be drawn
+  function drawCoarseSweep(\xa, \ya, \xb, \yb) {
+      { \draw[red] (\xa, \ya) rectangle (\xb, \yb); };
+  };
+  % specify how fine sweep blocks will be drawn
+  function drawFineSweep(\xa, \ya, \xb, \yb) {
+      { \draw[blue] (\xa, \ya) rectangle (\xb, \yb); };
+  };
+}
+
+\tikzmath{
   function procX1(\proc) {
       if \proc == 0 then {
         return \proc*\procWidth;
@@ -30,14 +61,14 @@
       \xb = procX2(\proc);
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\coarseHeight;
-      { \draw[red] (\xa, \ya) rectangle (\xb, \yb); };
+      drawCoarseSweep(\xa, \ya, \xb, \yb);
   };
   function fineSweep(\proc, \nCoarse, \nFine) {
       \xa = procX1(\proc);
       \xb = procX2(\proc);
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\fineHeight;
-      { \draw[blue] (\xa, \ya) rectangle (\xb, \yb); };
+      drawFineSweep(\xa, \ya, \xb, \yb);
   };
 }
 
@@ -58,6 +89,10 @@
         fineSweep(1, 2, 0);
         fineSweep(2, 3, 0);
         fineSweep(3, 4, 0);
+        coarseSweep(0, 1, 1);
+        coarseSweep(1, 2, 1);
+        coarseSweep(2, 3, 1);
+        coarseSweep(3, 4, 1);
     }
   \end{tikzpicture}
 \end{document}
