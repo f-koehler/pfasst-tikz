@@ -1,0 +1,58 @@
+\documentclass{scrartcl}
+\usepackage{tikz}
+\usetikzlibrary{math}
+
+\tikzmath{
+  \procWidth = 2.5;
+  \procSpace = 0.25;
+  \blockSpace = 0.25;
+  \coarseHeight = 0.6;
+  \fineHeight = 3;
+  function procX1(\proc) {
+      if \proc == 0 then {
+        return \proc*\procWidth;
+      } else {
+        return \proc*\procWidth+\proc*\procSpace;
+      };
+  };
+  function procX2(\proc) {
+      if \proc == 0 then {
+        return (\proc+1)*\procWidth;
+      } else {
+        return (\proc+1)*\procWidth+\proc*\procSpace;
+      };
+  };
+  function blockY(\nCoarse, \nFine) {
+      return \nCoarse*\coarseHeight+\nFine*\fineHeight+(\nCoarse+\nFine)*\blockSpace;
+  };
+  function coarseSweep(\proc, \nCoarse, \nFine) {
+      \xa = procX1(\proc);
+      \xb = procX2(\proc);
+      \ya = blockY(\nCoarse, \nFine);
+      \yb = \ya+\coarseHeight;
+      { \draw[red] (\xa, \ya) rectangle (\xb, \yb); };
+  };
+  % function fineSweep(\proc, \nCoarse, \nFine) {
+  %     \y = blockY(\nCoarse, \nFine);
+  %     \draw[blue] (procX1(\proc), \y) rectangle (procX2(\proc), \y+\fineHeight);
+  % };
+}
+
+\begin{document}
+  \begin{tikzpicture}
+    \tikzmath{
+        \x = procX2(1);
+        print{$\x$, };
+        coarseSweep(0, 0, 0);
+        coarseSweep(1, 0, 0);
+        coarseSweep(2, 0, 0);
+        coarseSweep(3, 0, 0);
+        coarseSweep(1, 1, 0);
+        coarseSweep(2, 1, 0);
+        coarseSweep(3, 1, 0);
+        coarseSweep(2, 2, 0);
+        coarseSweep(3, 2, 0);
+        coarseSweep(3, 3, 0);
+    }
+  \end{tikzpicture}
+\end{document}
