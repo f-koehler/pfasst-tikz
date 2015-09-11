@@ -32,17 +32,18 @@
       \yb = \ya+\coarseHeight;
       { \draw[red] (\xa, \ya) rectangle (\xb, \yb); };
   };
-  % function fineSweep(\proc, \nCoarse, \nFine) {
-  %     \y = blockY(\nCoarse, \nFine);
-  %     \draw[blue] (procX1(\proc), \y) rectangle (procX2(\proc), \y+\fineHeight);
-  % };
+  function fineSweep(\proc, \nCoarse, \nFine) {
+      \xa = procX1(\proc);
+      \xb = procX2(\proc);
+      \ya = blockY(\nCoarse, \nFine);
+      \yb = \ya+\fineHeight;
+      { \draw[blue] (\xa, \ya) rectangle (\xb, \yb); };
+  };
 }
 
 \begin{document}
   \begin{tikzpicture}
     \tikzmath{
-        \x = procX2(1);
-        print{$\x$, };
         coarseSweep(0, 0, 0);
         coarseSweep(1, 0, 0);
         coarseSweep(2, 0, 0);
@@ -53,6 +54,10 @@
         coarseSweep(2, 2, 0);
         coarseSweep(3, 2, 0);
         coarseSweep(3, 3, 0);
+        fineSweep(0, 1, 0);
+        fineSweep(1, 2, 0);
+        fineSweep(2, 3, 0);
+        fineSweep(3, 4, 0);
     }
   \end{tikzpicture}
 \end{document}
