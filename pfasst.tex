@@ -10,6 +10,8 @@
 
 % config variables
 \tikzmath{
+  \numProc = 4;
+  %
   % with of each processor
   \procWidth = 2.5;
   %
@@ -38,7 +40,13 @@
   };
 }
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to draw individual sweep blocks %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
+  % get the x coordinate where a process starts
   function procX1(\proc) {
       if \proc == 0 then {
         return \proc*\procWidth;
@@ -46,6 +54,8 @@
         return \proc*\procWidth+\proc*\procSpace;
       };
   };
+  %
+  % get the x coordinate where a process ends
   function procX2(\proc) {
       if \proc == 0 then {
         return (\proc+1)*\procWidth;
@@ -53,9 +63,15 @@
         return (\proc+1)*\procWidth+\proc*\procSpace;
       };
   };
+  %
+  % get the y coordinate where to start a block
+  % the number of coarse and fine blocks in the stack has to be specified
   function blockY(\nCoarse, \nFine) {
       return \nCoarse*\coarseHeight+\nFine*\fineHeight+(\nCoarse+\nFine)*\blockSpace;
   };
+  %
+  % draw a coarse sweep block on stack of a certain processor that contains
+  % a given number of coarse and fine blocks
   function coarseSweep(\proc, \nCoarse, \nFine) {
       \xa = procX1(\proc);
       \xb = procX2(\proc);
@@ -63,6 +79,9 @@
       \yb = \ya+\coarseHeight;
       drawCoarseSweep(\xa, \ya, \xb, \yb);
   };
+  %
+  % draw a fine sweep block on stack of a certain processor that contains
+  % a given number of coarse and fine blocks
   function fineSweep(\proc, \nCoarse, \nFine) {
       \xa = procX1(\proc);
       \xb = procX2(\proc);
@@ -70,6 +89,21 @@
       \yb = \ya+\fineHeight;
       drawFineSweep(\xa, \ya, \xb, \yb);
   };
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to draw bigger parts of pfasst at once %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzmath{
+  % function predictStep(\stepNum) {
+  %   for \proc in {0, \numProc-1}{
+  %     if \stepNum < \proc then {
+  %       coarseSweep(\proc, );
+  %     };
+  %   };
+  % };
 }
 
 \begin{document}
