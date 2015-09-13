@@ -1,6 +1,6 @@
 % Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
-\usepackage{tikz}
 \usetikzlibrary{math}
+\usetikzlibrary{arrows}
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -12,30 +12,35 @@
   \numProc = 4;
   %
   % with of each processor
-  \procWidth = 2;
+  \procWidth = 2.5;
   %
   % spacing between processors (hspace)
-  \procSpace = 0.5;
+  \procSpace = 0.1;
   %
   % spacing between blocks (vspace9
-  \blockSpace = 0.6;
+  \blockSpace = 0.1;
   %
   % height of coarse sweep blocks
-  \coarseHeight = 3;
+  \coarseHeight = 0.6;
   %
   % height of fine sweep blocks
-  \fineHeight = 6;
+  \fineHeight = 3;
+  \axisHSpace = 0.3;
+  \axisVSpace = 0.3;
 }
 
 % draw functions for elements (blocks, lines, ...)
 \tikzmath{
   % specify how coarse sweep blocks will be drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-      { \draw[red] (\xa, \ya) rectangle (\xb, \yb); };
+    { \fill[red] (\xa, \ya) rectangle (\xb, \yb); };
   };
   % specify how fine sweep blocks will be drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-      { \draw[blue] (\xa, \ya) rectangle (\xb, \yb); };
+    { \fill[blue] (\xa, \ya) rectangle (\xb, \yb); };
+  };
+  function drawAxis(\xa, \ya, \xb, \yb) {
+    { \draw[->] (\xa, \ya) -- (\xb, \yb); };
   };
 }
 
@@ -159,5 +164,27 @@
     for \step in {0, ..., \steps-1}{
       pfasstStep(\step);
     };
+  };
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to draw axes %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzmath{
+  function getPfasstWidth(\unused) {
+    return (\numProc-1)*(\procWidth+\procSpace)+\procWidth;
+  };
+  function drawXAxis(\unused) {
+    \w = getPfasstWidth(0)+\axisHSpace;
+    drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
+  };
+  function drawYAxis(\pfasstSteps) {
+    drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, 5);
+  };
+  function drawAxes(\pfasstSteps) {
+    drawXAxis(0);
+    drawYAxis(\pfasstSteps);
   };
 }

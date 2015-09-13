@@ -6,7 +6,7 @@ EXAMPLES_SVG:=$(addsuffix .svg, ${EXAMPLES})
 all: ${EXAMPLES_PDF} ${EXAMPLES_SVG}
 %.pdf: %.tex ../pfasst.tex
 	${TEX} $<
-	pdfcrop --hires $@ $@
+	# pdfcrop --hires $@ $@
 %.svg: %.pdf
 	inkscape -l $@ $<
 
