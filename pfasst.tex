@@ -10,6 +10,7 @@
 
 % config variables
 \tikzmath{
+  % number of processors in the diagram (not used in manual block drawing)
   \numProc = 4;
   %
   % with of each processor
@@ -97,36 +98,76 @@
 % Functions to draw bigger parts of pfasst at once %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
-  % function predictStep(\stepNum) {
-  %   for \proc in {0, \numProc-1}{
-  %     if \stepNum < \proc then {
-  %       coarseSweep(\proc, );
-  %     };
-  %   };
-  % };
+  % number of coarse sweeps in prediction on a processor
+  function numPredictBlocks(\proc) {
+    return \proc+1;
+  };
+  %
+  % number of coarse sweeps in prediction up to a certain step on a processor
+  function numPredictBlocksStep(\proc, \step) {
+    if \step >= \proc then {
+      return \proc+1;
+    } else {
+      return \step+1;
+    };
+  };
+  %
+  % draw a single step of the prediction on all processors
+  function predictStep(\step) {
+    for \proc in {0, ..., \numProc-1}{
+      \n = numPredictBlocksStep(\proc, \step);
+      coarseSweep(\proc, \n-1, 0);
+    };
+  };
+  %
+  % draw fine sweeps of pfasst step
+  function pfasstStepFine(\step) {
+    for \proc in {0, ..., \numProc-1}{
+      \nCoarse = \step+numPredictBlocks(\proc);
+      \nFine   = \step;
+      fineSweep(\proc, \nCoarse, \nFine);
+    };
+  };
+  %
+  % draw coarse sweeps of pfasst step
+  function pfasstStepCoarse(\step) {
+    for \proc in {0, ..., \numProc-1}{
+      \nCoarse = \step+numPredictBlocks(\proc);
+      \nFine   = \step+1;
+      coarseSweep(\proc, \nCoarse, \nFine);
+    };
+  };
+  %
+  % draw the full prediction on all processors
+  % the parameter is not used, but it seems that you cannot use functions
+  % without parameters
+  function predict(\unused) {
+    for \step in {0, ..., \numProc-1}{
+      predictStep(\step);
+    };
+  };
+  %
+  % draw a full pfasst step
+  function pfasstStep(\step) {
+    for \proc in {0, ..., \numProc-1}{
+      pfasstStepFine(\step);
+      pfasstStepCoarse(\step);
+    };
+  };
+  %
+  % draw the full algorithm with a specified number of pfasst steps
+  function pfasst(\steps) {
+    predict(0);
+    for \step in {0, ..., \steps-1}{
+      pfasstStep(\step);
+    };
+  };
 }
 
 \begin{document}
   \begin{tikzpicture}
     \tikzmath{
-        coarseSweep(0, 0, 0);
-        coarseSweep(1, 0, 0);
-        coarseSweep(2, 0, 0);
-        coarseSweep(3, 0, 0);
-        coarseSweep(1, 1, 0);
-        coarseSweep(2, 1, 0);
-        coarseSweep(3, 1, 0);
-        coarseSweep(2, 2, 0);
-        coarseSweep(3, 2, 0);
-        coarseSweep(3, 3, 0);
-        fineSweep(0, 1, 0);
-        fineSweep(1, 2, 0);
-        fineSweep(2, 3, 0);
-        fineSweep(3, 4, 0);
-        coarseSweep(0, 1, 1);
-        coarseSweep(1, 2, 1);
-        coarseSweep(2, 3, 1);
-        coarseSweep(3, 4, 1);
+      pfasst(2);
     }
   \end{tikzpicture}
 \end{document}
