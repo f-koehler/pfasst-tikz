@@ -12,13 +12,13 @@
   \numProc = 4;
   %
   % with of each processor
-  \procWidth = 2.5;
+  \blockWidth = 2.5;
   %
   % spacing between processors (hspace)
-  \procSpace = 0.1;
+  \blockHSpace = 0.1;
   %
   % spacing between blocks (vspace9
-  \blockSpace = 0.1;
+  \blockVSpace = 0.1;
   %
   % height of coarse sweep blocks
   \coarseHeight = 0.6;
@@ -35,17 +35,22 @@
 \tikzmath{
   % specify how coarse sweep blocks will be drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-    { \fill[red] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[red] (\xa, \ya) rectangle (\xb, \yb); };
   };
   % specify how fine sweep blocks will be drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-    { \fill[blue] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[blue] (\xa, \ya) rectangle (\xb, \yb); };
   };
   function drawAxis(\xa, \ya, \xb, \yb) {
-    { \draw[->] (\xa, \ya) -- (\xb, \yb); };
+      { \draw[->] (\xa, \ya) -- (\xb, \yb); };
   };
-  function drawXTick(\x) {
+  function drawProcTick(\x, \proc) {
       { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
+      { \node at (\x,-\ticksHeight-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
+  };
+  function drawTimeTick(\x, \i) {
+      { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
+      { \node at (\x,-\ticksHeight-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
 }
 
@@ -58,25 +63,25 @@
   % get the x coordinate where a process starts
   function procX1(\proc) {
       if \proc == 0 then {
-        return \proc*\procWidth;
+        return \proc*\blockWidth;
       } else {
-        return \proc*\procWidth+\proc*\procSpace;
+        return \proc*\blockWidth+\proc*\blockHSpace;
       };
   };
   %
   % get the x coordinate where a process ends
   function procX2(\proc) {
       if \proc == 0 then {
-        return (\proc+1)*\procWidth;
+        return (\proc+1)*\blockWidth;
       } else {
-        return (\proc+1)*\procWidth+\proc*\procSpace;
+        return (\proc+1)*\blockWidth+\proc*\blockHSpace;
       };
   };
   %
   % get the y coordinate where to start a block
   % the number of coarse and fine blocks in the stack has to be specified
   function blockY(\nCoarse, \nFine) {
-      return \nCoarse*\coarseHeight+\nFine*\fineHeight+(\nCoarse+\nFine)*\blockSpace;
+      return \nCoarse*\coarseHeight+\nFine*\fineHeight+(\nCoarse+\nFine)*\blockVSpace;
   };
   %
   % number of coarse sweeps in prediction on a processor
@@ -93,14 +98,14 @@
     };
   };
   function getPfasstWidth(\unused) {
-    return (\numProc-1)*(\procWidth+\procSpace)+\procWidth;
+    return (\numProc-1)*(\blockWidth+\blockHSpace)+\blockWidth;
   };
   function getPfasstHeight(\pfasstSteps) {
-    \predictHeight = (\numProc-1)*(\coarseHeight+\blockSpace)+\coarseHeight;
+    \predictHeight = (\numProc-1)*(\coarseHeight+\blockVSpace)+\coarseHeight;
     if \pfasstSteps == 0 then {
         return \predictHeight;
     };
-    \h = (\pfasstSteps-1)*(\coarseHeight+\fineHeight+2*\blockSpace)+\coarseHeight+\fineHeight+\blockSpace;
+    \h = (\pfasstSteps-1)*(\coarseHeight+\fineHeight+2*\blockVSpace)+\coarseHeight+\fineHeight+\blockVSpace;
     return \h+\predictHeight;
   };
 }
@@ -201,12 +206,13 @@
     for \proc in {0, ..., \numProc-1}{
         \x = 0;
         if \proc == 0 then {
-          \x = \procWidth/2;
+          \x = \blockWidth/2;
         } else {
-          \x = \proc*(\procWidth+\procSpace)+\procWidth/2;
+          \x = \proc*(\blockWidth+\blockHSpace)+\blockWidth/2;
         };
-        drawXTick(\x);
-        { \node at (\x,-\ticksHeight-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
+        drawProcTick(\x, \proc);
+        \x = \proc*(\blockWidth+\blockHSpace);
+        drawTimeTick(\x, \proc);
     };
   };
   function drawYAxis(\pfasstSteps) {
