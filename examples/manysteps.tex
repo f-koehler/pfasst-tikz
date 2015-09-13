@@ -1,0 +1,17 @@
+\documentclass[tikz]{standalone}
+
+\input{../pfasst.tex}
+
+\begin{document}
+  \begin{tikzpicture}
+    \tikzmath{
+      \numProc = 12;
+      \procWidth = 1;
+      \procSpace = 0.1;
+      \blockSpace = 0.1;
+      \coarseHeight = 0.2;
+      \fineHeight = 0.7;
+      pfasst(20);
+    }
+  \end{tikzpicture}
+\end{document}

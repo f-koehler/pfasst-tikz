@@ -1,5 +1,3 @@
-\documentclass{scrartcl}
-
 % Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
 \usepackage{tikz}
 \usetikzlibrary{math}
@@ -14,19 +12,19 @@
   \numProc = 4;
   %
   % with of each processor
-  \procWidth = 2.5;
+  \procWidth = 2;
   %
   % spacing between processors (hspace)
-  \procSpace = 0.25;
+  \procSpace = 0.5;
   %
   % spacing between blocks (vspace9
-  \blockSpace = 0.25;
+  \blockSpace = 0.6;
   %
   % height of coarse sweep blocks
-  \coarseHeight = 0.6;
+  \coarseHeight = 3;
   %
   % height of fine sweep blocks
-  \fineHeight = 3;
+  \fineHeight = 6;
 }
 
 % draw functions for elements (blocks, lines, ...)
@@ -163,11 +161,3 @@
     };
   };
 }
-
-\begin{document}
-  \begin{tikzpicture}
-    \tikzmath{
-      pfasst(2);
-    }
-  \end{tikzpicture}
-\end{document}
