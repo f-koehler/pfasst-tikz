@@ -27,6 +27,8 @@
   \fineHeight = 3;
   \axisHSpace = 0.3;
   \axisVSpace = 0.3;
+  \ticksHeight = 0.2;
+  \ticksOffset = 0.6;
 }
 
 % draw functions for elements (blocks, lines, ...)
@@ -42,13 +44,16 @@
   function drawAxis(\xa, \ya, \xb, \yb) {
     { \draw[->] (\xa, \ya) -- (\xb, \yb); };
   };
+  function drawXTick(\x) {
+      { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
+  };
 }
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functions to draw individual sweep blocks %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to calculate positions %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
   % get the x coordinate where a process starts
   function procX1(\proc) {
@@ -74,6 +79,37 @@
       return \nCoarse*\coarseHeight+\nFine*\fineHeight+(\nCoarse+\nFine)*\blockSpace;
   };
   %
+  % number of coarse sweeps in prediction on a processor
+  function numPredictBlocks(\proc) {
+    return \proc+1;
+  };
+  %
+  % number of coarse sweeps in prediction up to a certain step on a processor
+  function numPredictBlocksStep(\proc, \step) {
+    if \step >= \proc then {
+      return \proc+1;
+    } else {
+      return \step+1;
+    };
+  };
+  function getPfasstWidth(\unused) {
+    return (\numProc-1)*(\procWidth+\procSpace)+\procWidth;
+  };
+  function getPfasstHeight(\pfasstSteps) {
+    \predictHeight = (\numProc-1)*(\coarseHeight+\blockSpace)+\coarseHeight;
+    if \pfasstSteps == 0 then {
+        return \predictHeight;
+    };
+    \h = (\pfasstSteps-1)*(\coarseHeight+\fineHeight+2*\blockSpace)+\coarseHeight+\fineHeight+\blockSpace;
+    return \h+\predictHeight;
+  };
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to draw individual sweep blocks %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzmath{
   % draw a coarse sweep block on stack of a certain processor that contains
   % a given number of coarse and fine blocks
   function coarseSweep(\proc, \nCoarse, \nFine) {
@@ -101,20 +137,6 @@
 % Functions to draw bigger parts of pfasst at once %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
-  % number of coarse sweeps in prediction on a processor
-  function numPredictBlocks(\proc) {
-    return \proc+1;
-  };
-  %
-  % number of coarse sweeps in prediction up to a certain step on a processor
-  function numPredictBlocksStep(\proc, \step) {
-    if \step >= \proc then {
-      return \proc+1;
-    } else {
-      return \step+1;
-    };
-  };
-  %
   % draw a single step of the prediction on all processors
   function predictStep(\step) {
     for \proc in {0, ..., \numProc-1}{
@@ -173,15 +195,23 @@
 % Functions to draw axes %
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
-  function getPfasstWidth(\unused) {
-    return (\numProc-1)*(\procWidth+\procSpace)+\procWidth;
-  };
   function drawXAxis(\unused) {
     \w = getPfasstWidth(0)+\axisHSpace;
     drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
+    for \proc in {0, ..., \numProc-1}{
+        \x = 0;
+        if \proc == 0 then {
+          \x = \procWidth/2;
+        } else {
+          \x = \proc*(\procWidth+\procSpace)+\procWidth/2;
+        };
+        drawXTick(\x);
+        { \node at (\x,-\ticksHeight-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
+    };
   };
   function drawYAxis(\pfasstSteps) {
-    drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, 5);
+    \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
+    drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, \h);
   };
   function drawAxes(\pfasstSteps) {
     drawXAxis(0);
