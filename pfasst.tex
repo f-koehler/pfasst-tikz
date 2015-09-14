@@ -2,6 +2,8 @@
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 
+
+
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
@@ -73,9 +75,9 @@
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functions to calculate positions %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to calculate properties %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
   % get the x coordinate where a process starts
   function procX1(\proc) {
@@ -197,10 +199,12 @@
 \tikzmath{
   % draw a single step of the prediction on all processors
   function predictStep(\step) {
-    for \proc in {0, ..., \numProc-1}{
-      \n = numPredictBlocksStep(\proc, \step);
-      coarseSweep(\proc, \n-1, 0);
-    };
+      for \proc in {0, ..., \numProc-1}{
+          \n = numPredictBlocksStep(\proc, \step);
+          if \step+1 <= \n then {
+              coarseSweep(\proc, \n-1, 0);
+          };
+      };
   };
   %
   % draw fine sweeps of pfasst step
