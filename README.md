@@ -7,5 +7,7 @@ Requirements:
 - `TikZ/PGF` from TeX Live
 
 Requirements for examples:
-- `pdfcrop` from TeX Live
 - `inkscape`
+- `latexmk` from TeX Live
+- `pdfcrop` from TeX Live
+- `standalone` from TeX Live

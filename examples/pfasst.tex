@@ -1,6 +1,5 @@
 % \documentclass[tikz]{standalone}
-\documentclass{scrartcl}
-\usepackage{tikz}
+\documentclass[tikz]{standalone}
 
 \input{../pfasst.tex}
 
@@ -8,7 +7,9 @@
   \begin{tikzpicture}
     \tikzmath{
       predict(0);
-      drawAxes(0);
+      drawAxes(2);
+      pfasstStep(0);
+      pfasstStep(1);
     }
   \end{tikzpicture}
 \end{document}
