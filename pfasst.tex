@@ -29,6 +29,7 @@
   \axisVSpace = 0.3;
   \ticksHeight = 0.2;
   \ticksOffset = 0.6;
+  \drawComm = 1;
 }
 
 % draw functions for elements (blocks, lines, ...)
@@ -51,6 +52,12 @@
   function drawTimeTick(\x, \i) {
       { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
       { \node at (\x,-\ticksHeight-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
+  };
+  function drawCoarseComm(\xa, \ya, \xb, \yb) {
+      \xh = (\xb+\xa)/2;
+      \yh = (\ya+\yb)/2;
+      { \draw[->] (\xa,\ya) -- (\xh,\yh); };
+      { \draw (\xh,\yh) -- (\xb,\yb); };
   };
 }
 
@@ -137,6 +144,17 @@
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\coarseHeight;
       drawCoarseSweep(\xa, \ya, \xb, \yb);
+      if \drawComm == 1 then {
+          if \proc > 0 then {
+              if \nCoarse > 0 then {
+                  \xa = procX2(\proc-1);
+                  \ya = blockY(\nCoarse-1, \nFine)+\coarseHeight;
+                  \xb = procX1(\proc);
+                  \yb = blockY(\nCoarse, \nFine);
+                  drawCoarseComm(\xa,\ya,\xb,\yb);
+              };
+          };
+      };
   };
   %
   % draw a fine sweep block on stack of a certain processor that contains
