@@ -19,7 +19,7 @@
   \blockHSpace = 0.9;
   %
   % vertical space between blocks
-  \blockVSpace = 0.05;
+  \blockVSpace = 0.08;
   %
   % height of coarse sweep blocks
   \coarseHeight = 0.4;
@@ -41,6 +41,15 @@
   %
   % if drawComm == 1 the arrows for communication will be drawn
   \drawComm = 1;
+  %
+  % ratio at which the triangle for coarse comm arrows will be drawn
+  \coarseCommRatio = 0.4;
+  %
+  % ratio at which the triangle for fine comm arrows will be drawn
+  \fineCommRatio = 0.8;
+  %
+  % radius for the small circles at the end of comm arrows
+  \commCircleRadius = 0.03;
 }
 
 % draw functions for elements (blocks, lines, ...)
@@ -74,18 +83,22 @@
   %
   % draw coarse communication
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
-      \xh = (0.4*\xb+0.6*\xa);
-      \yh = (0.4*\yb+0.6*\ya);
+      \xh = (\coarseCommRatio*\xb+(1-\coarseCommRatio)*\xa);
+      \yh = (\coarseCommRatio*\yb+(1-\coarseCommRatio)*\ya);
       { \draw[thick,-{Triangle[open]}] (\xa,\ya) -- (\xh,\yh); };
       { \draw[thick] (\xh,\yh) -- (\xb,\yb); };
+      { \fill[draw=black,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
+      { \fill[draw=black,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
   };
   %
   % draw fine communication
   function drawFineComm(\xa, \ya, \xb, \yb) {
-      \xh = (0.8*\xb+0.2*\xa);
-      \yh = (0.8*\yb+0.2*\ya);
+      \xh = (\fineCommRatio*\xb+(1-\fineCommRatio)*\xa);
+      \yh = (\fineCommRatio*\yb+(1-\fineCommRatio)*\ya);
       { \draw[thick, -{Triangle[open]},>=latex,black!60!green] (\xa,\ya) -- (\xh,\yh); };
       { \draw[thick, black!60!green] (\xh,\yh) -- (\xb,\yb); };
+      { \fill[draw=black!60!green,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
+      { \fill[draw=black!60!green,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
   };
   %
   % label the y axis
