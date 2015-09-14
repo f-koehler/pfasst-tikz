@@ -11,7 +11,7 @@ Requirements:
 - `TikZ/PGF` from TeX Live
 
 Requirements for examples:
-- `pdf2svg` (for optional svg export)
+- `pdf2svg` (for optional svg export) [see here](http://www.cityinthesky.co.uk/opensource/pdf2svg/)
 - `latexmk` from TeX Live
 - `pdfcrop` from TeX Live
 - `standalone` from TeX Live
