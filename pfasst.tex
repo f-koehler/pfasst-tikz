@@ -12,10 +12,10 @@
   \numProc = 4;
   %
   % width of sweep blocks
-  \blockWidth = 2.5;
+  \blockWidth = 2;
   %
   % horizontal space between blocks
-  \blockHSpace = 0.1;
+  \blockHSpace = 0.8;
   %
   % vertical space between blocks
   \blockVSpace = 0.1;
@@ -25,7 +25,7 @@
   %
   % height of fine sweep blocks
   \fineHeight = 3;
-  \axisHSpace = 0.3;
+  \axisHSpace = 1.1*\blockHSpace;
   \axisVSpace = 0.3;
   \ticksHeight = 0.2;
   \ticksOffset = 0.6;
@@ -46,11 +46,11 @@
       { \draw[->] (\xa, \ya) -- (\xb, \yb); };
   };
   function drawProcTick(\x, \proc) {
-      { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
+      { \draw (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksHeight); };
       { \node at (\x,-\ticksHeight-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
   };
   function drawTimeTick(\x, \i) {
-      { \draw (\x, -\axisHSpace) -- (\x, -\axisHSpace-\ticksHeight); };
+      { \draw (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksHeight); };
       { \node at (\x,-\ticksHeight-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
@@ -58,6 +58,16 @@
       \yh = (\ya+\yb)/2;
       { \draw[->] (\xa,\ya) -- (\xh,\yh); };
       { \draw (\xh,\yh) -- (\xb,\yb); };
+  };
+  function drawFineComm(\xa, \ya, \xb, \yb) {
+      \xh = (\xb+\xa)/2;
+      \yh = (\ya+\yb)/2;
+      { \draw[->,green] (\xa,\ya) -- (\xh,\yh); };
+      { \draw (\xh,\yh) -- (\xb,\yb); };
+  };
+  function labelYAxis(\pfasstSteps) {
+      \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
+      { \node[rotate=90] at (-\axisHSpace-\ticksOffset, \y) { computation time }; };
   };
 }
 
@@ -165,6 +175,17 @@
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\fineHeight;
       drawFineSweep(\xa, \ya, \xb, \yb);
+      if \drawComm == 1 then {
+          if \proc > 0 then {
+              if \nFine > 1 then {
+                  \xa = procX2(\proc);
+                  \ya = blockY(\nCoarse-1, \nFine-1);
+                  \xb = procX1(\proc);
+                  \yb = blockY(\nCoarse, \nFine);
+                  drawFineComm(\xa, \ya, \xb, \yb);
+              };
+          };
+      };
   };
 }
 
@@ -247,6 +268,7 @@
   function drawYAxis(\pfasstSteps) {
     \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
     drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, \h);
+    labelYAxis(\pfasstSteps);
   };
   function drawAxes(\pfasstSteps) {
     drawXAxis(0);
