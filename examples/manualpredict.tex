@@ -1,0 +1,16 @@
+% \documentclass[tikz]{standalone}
+\documentclass[tikz]{standalone}
+
+\input{../pfasst.tex}
+
+\begin{document}
+  \begin{tikzpicture}
+    \tikzmath{
+      \numProc = 5;
+      predictStep(0);
+      coarseSweep(1, 1, 0);
+      coarseSweep(2, 1, 0);
+      drawAxes(0); 
+    }
+  \end{tikzpicture}
+\end{document}

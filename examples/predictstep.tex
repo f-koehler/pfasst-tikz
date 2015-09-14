@@ -1,0 +1,17 @@
+% \documentclass[tikz]{standalone}
+\documentclass[tikz]{standalone}
+
+\input{../pfasst.tex}
+
+\begin{document}
+  \begin{tikzpicture}
+    \tikzmath{
+      \numProc = 8;
+      predictStep(0);
+      predictStep(1);
+      predictStep(2);
+      predictStep(3);
+      drawAxes(1);
+    }
+  \end{tikzpicture}
+\end{document}
