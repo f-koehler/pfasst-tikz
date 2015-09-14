@@ -37,11 +37,11 @@
 \tikzmath{
   % specify how coarse sweep blocks will be drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-      { \fill[red] (\xa, \ya) rectangle (\xb, \yb); };
+      { \filldraw[draw=black,fill=red] (\xa, \ya) rectangle (\xb, \yb); };
   };
   % specify how fine sweep blocks will be drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-      { \fill[blue] (\xa, \ya) rectangle (\xb, \yb); };
+      { \filldraw[draw=black,fill=blue] (\xa, \ya) rectangle (\xb, \yb); };
   };
   function drawAxis(\xa, \ya, \xb, \yb) {
       { \draw[->,>=latex,thick] (\xa, \ya) -- (\xb, \yb); };
@@ -57,14 +57,14 @@
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
       \xh = (0.59*\xb+0.41*\xa);
       \yh = (0.59*\yb+0.41*\ya);
-      { \draw[-{Triangle[open]}] (\xa,\ya) -- (\xh,\yh); };
-      { \draw (\xh,\yh) -- (\xb,\yb); };
+      { \draw[thick,-{Triangle[open]}] (\xa,\ya) -- (\xh,\yh); };
+      { \draw[thick] (\xh,\yh) -- (\xb,\yb); };
   };
   function drawFineComm(\xa, \ya, \xb, \yb) {
       \xh = (0.59*\xb+0.41*\xa);
       \yh = (0.59*\yb+0.41*\ya);
-      { \draw[-{Triangle[open]},>=latex,black!60!green] (\xa,\ya) -- (\xh,\yh); };
-      { \draw[black!60!green] (\xh,\yh) -- (\xb,\yb); };
+      { \draw[thick, -{Triangle[open]},>=latex,black!60!green] (\xa,\ya) -- (\xh,\yh); };
+      { \draw[thick, black!60!green] (\xh,\yh) -- (\xb,\yb); };
   };
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
