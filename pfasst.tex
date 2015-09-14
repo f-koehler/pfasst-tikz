@@ -10,28 +10,28 @@
 
 % config variables
 \tikzmath{
-  % number of processors in the diagram (not used in manual block drawing)
-  \numProc = 4;
-  %
-  % width of sweep blocks
-  \blockWidth = 1.8;
-  %
-  % horizontal space between blocks
-  \blockHSpace = 0.9;
-  %
-  % vertical space between blocks
-  \blockVSpace = 0.05;
-  %
-  % height of coarse sweep blocks
-  \coarseHeight = 0.3;
-  %
-  % height of fine sweep blocks
-  \fineHeight = 1.3;
-  \axisHSpace = 1.001*\blockHSpace;
-  \axisVSpace = 0.15;
-  \ticksHeight = 0.1;
-  \ticksOffset = 0.4;
-  \drawComm = 1;
+    % number of processors in the diagram (not used in manual block drawing)
+    \numProc = 4;
+    %
+    % width of sweep blocks
+    \blockWidth = 1.8;
+    %
+    % horizontal space between blocks
+    \blockHSpace = 0.9;
+    %
+    % vertical space between blocks
+    \blockVSpace = 0.05;
+    %
+    % height of coarse sweep blocks
+    \coarseHeight = 0.3;
+    %
+    % height of fine sweep blocks
+    \fineHeight = 1.3;
+    \axisHSpace = 1.001*\blockHSpace;
+    \axisVSpace = 0.15;
+    \ticksHeight = 0.1;
+    \ticksOffset = 0.4;
+    \drawComm = 1;
 }
 
 % draw functions for elements (blocks, lines, ...)
@@ -209,45 +209,45 @@
   %
   % draw fine sweeps of pfasst step
   function pfasstStepFine(\step) {
-    for \proc in {0, ..., \numProc-1}{
-      \nCoarse = \step+numPredictBlocks(\proc);
-      \nFine   = \step;
-      fineSweep(\proc, \nCoarse, \nFine);
-    };
+      for \proc in {0, ..., \numProc-1}{
+          \nCoarse = \step+numPredictBlocks(\proc);
+          \nFine   = \step;
+          fineSweep(\proc, \nCoarse, \nFine);
+      };
   };
   %
   % draw coarse sweeps of pfasst step
   function pfasstStepCoarse(\step) {
-    for \proc in {0, ..., \numProc-1}{
-      \nCoarse = \step+numPredictBlocks(\proc);
-      \nFine   = \step+1;
-      coarseSweep(\proc, \nCoarse, \nFine);
-    };
+      for \proc in {0, ..., \numProc-1}{
+          \nCoarse = \step+numPredictBlocks(\proc);
+          \nFine   = \step+1;
+          coarseSweep(\proc, \nCoarse, \nFine);
+      };
   };
   %
   % draw the full prediction on all processors
   % the parameter is not used, but it seems that you cannot use functions
   % without parameters
   function predict(\unused) {
-    for \step in {0, ..., \numProc-1}{
-      predictStep(\step);
-    };
+      for \step in {0, ..., \numProc-1}{
+          predictStep(\step);
+      };
   };
   %
   % draw a full pfasst step
   function pfasstStep(\step) {
-    for \proc in {0, ..., \numProc-1}{
-      pfasstStepFine(\step);
-      pfasstStepCoarse(\step);
-    };
+      for \proc in {0, ..., \numProc-1}{
+          pfasstStepFine(\step);
+          pfasstStepCoarse(\step);
+      };
   };
   %
   % draw the full algorithm with a specified number of pfasst steps
   function pfasst(\steps) {
-    predict(0);
-    for \step in {0, ..., \steps-1}{
-      pfasstStep(\step);
-    };
+      predict(0);
+      for \step in {0, ..., \steps-1}{
+          pfasstStep(\step);
+      };
   };
 }
 
@@ -258,24 +258,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
   function drawXAxis(\unused) {
-    \w = getPfasstWidth(0)+\axisHSpace;
-    drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
-    for \proc in {0, ..., \numProc-1}{
-        \x = getProcTickX(\proc);
-        drawProcTick(\x, \proc);
-        \x = getTimeTickX(\proc);
-        drawTimeTick(\x, \proc);
-    };
-    \x = getTimeTickX(\numProc);
-    drawTimeTick(\x, \numProc);
+      \w = getPfasstWidth(0)+\axisHSpace;
+      drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
+      for \proc in {0, ..., \numProc-1}{
+          \x = getProcTickX(\proc);
+          drawProcTick(\x, \proc);
+          \x = getTimeTickX(\proc);
+          drawTimeTick(\x, \proc);
+      };
+      \x = getTimeTickX(\numProc);
+      drawTimeTick(\x, \numProc);
   };
   function drawYAxis(\pfasstSteps) {
-    \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
-    drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, \h);
-    labelYAxis(\pfasstSteps);
+      \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
+      drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, \h);
+      labelYAxis(\pfasstSteps);
   };
   function drawAxes(\pfasstSteps) {
-    drawXAxis(0);
-    drawYAxis(\pfasstSteps);
+      drawXAxis(0);
+      drawYAxis(\pfasstSteps);
   };
 }
