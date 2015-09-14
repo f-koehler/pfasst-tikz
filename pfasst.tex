@@ -51,7 +51,7 @@
   };
   function drawTimeTick(\x, \i) {
       { \draw (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksHeight); };
-      { \node at (\x,-\ticksHeight-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
+      { \node[text=black!60!white] at (\x,-\ticksHeight-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
       \xh = (0.59*\xb+0.41*\xa);
