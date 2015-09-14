@@ -2,12 +2,13 @@ EXAMPLES=pfasst manysteps predictstep fullpredict manualpredict
 EXAMPLES_PDF:=$(addsuffix .pdf, ${EXAMPLES})
 EXAMPLES_SVG:=$(addsuffix .svg, ${EXAMPLES})
 
-all: ${EXAMPLES_PDF} ${EXAMPLES_SVG}
+all: ${EXAMPLES_PDF}
+svg: ${EXAMPLES_SVG}
 %.pdf: %.tex ../pfasst.tex
 	latexmk -pdf $<
 	pdfcrop --hires $@ $@
 %.svg: %.pdf
-	inkscape -l $@ $<
+	pdf2svg $< $@
 
 .PHONY: clean
 clean:
