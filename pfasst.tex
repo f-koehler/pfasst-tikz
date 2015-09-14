@@ -7,7 +7,6 @@
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
-
 % config variables
 \tikzmath{
     % number of processors in the diagram (not used in manual block drawing)
@@ -236,10 +235,8 @@
   %
   % draw a full pfasst step
   function pfasstStep(\step) {
-      for \proc in {0, ..., \numProc-1}{
-          pfasstStepFine(\step);
-          pfasstStepCoarse(\step);
-      };
+      pfasstStepFine(\step);
+      pfasstStepCoarse(\step);
   };
   %
   % draw the full algorithm with a specified number of pfasst steps
