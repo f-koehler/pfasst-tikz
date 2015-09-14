@@ -62,7 +62,7 @@
   function drawFineComm(\xa, \ya, \xb, \yb) {
       \xh = (\xb+\xa)/2;
       \yh = (\ya+\yb)/2;
-      { \draw[->,green] (\xa,\ya) -- (\xh,\yh); };
+      { \draw[->] (\xa,\ya) -- (\xh,\yh); };
       { \draw (\xh,\yh) -- (\xb,\yb); };
   };
   function labelYAxis(\pfasstSteps) {
@@ -177,9 +177,9 @@
       drawFineSweep(\xa, \ya, \xb, \yb);
       if \drawComm == 1 then {
           if \proc > 0 then {
-              if \nFine > 1 then {
-                  \xa = procX2(\proc);
-                  \ya = blockY(\nCoarse-1, \nFine-1);
+              if \nFine > 0 then {
+                  \xa = procX2(\proc-1);
+                  \ya = blockY(\nCoarse-2, \nFine-1);
                   \xb = procX1(\proc);
                   \yb = blockY(\nCoarse, \nFine);
                   drawFineComm(\xa, \ya, \xb, \yb);
