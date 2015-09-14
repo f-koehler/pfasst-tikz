@@ -5,7 +5,7 @@ Visualize how the PFASST algorithm works using TikZ. The `math` library of TikZ 
 
 I created an example svg (the original PDF looks nicer though):
 
-![Example of PFASST with 2 steps + 1 fine sweep](https://raw.githubusercontent.com/f-koehler/pfasst-tikz/gh-pages/pfasst.svg "Example of PFASST with 2 steps + 1 fine sweep")
+![Example of PFASST with 2 steps + 1 fine sweep](http://f-koehler.github.io/pfasst-tikz/pfasst.svg "Example of PFASST with 2 steps + 1 fine sweep")
 
 Requirements:
 - `TikZ/PGF` from TeX Live
