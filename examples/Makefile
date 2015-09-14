@@ -1,5 +1,5 @@
 TEX=lualatex
-EXAMPLES=fullpredict manysteps
+EXAMPLES=fullpredict
 EXAMPLES_PDF:=$(addsuffix .pdf, ${EXAMPLES})
 EXAMPLES_SVG:=$(addsuffix .svg, ${EXAMPLES})
 

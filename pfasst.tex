@@ -11,13 +11,13 @@
   % number of processors in the diagram (not used in manual block drawing)
   \numProc = 4;
   %
-  % with of each processor
+  % width of sweep blocks
   \blockWidth = 2.5;
   %
-  % spacing between processors (hspace)
+  % horizontal space between blocks
   \blockHSpace = 0.1;
   %
-  % spacing between blocks (vspace9
+  % vertical space between blocks
   \blockVSpace = 0.1;
   %
   % height of coarse sweep blocks
@@ -72,9 +72,9 @@
   % get the x coordinate where a process ends
   function procX2(\proc) {
       if \proc == 0 then {
-        return (\proc+1)*\blockWidth;
+          return (\proc+1)*\blockWidth;
       } else {
-        return (\proc+1)*\blockWidth+\proc*\blockHSpace;
+          return (\proc+1)*\blockWidth+\proc*\blockHSpace;
       };
   };
   %
@@ -86,27 +86,41 @@
   %
   % number of coarse sweeps in prediction on a processor
   function numPredictBlocks(\proc) {
-    return \proc+1;
+      return \proc+1;
   };
   %
   % number of coarse sweeps in prediction up to a certain step on a processor
   function numPredictBlocksStep(\proc, \step) {
-    if \step >= \proc then {
-      return \proc+1;
-    } else {
-      return \step+1;
-    };
+      if \step >= \proc then {
+        return \proc+1;
+      } else {
+        return \step+1;
+      };
   };
   function getPfasstWidth(\unused) {
     return (\numProc-1)*(\blockWidth+\blockHSpace)+\blockWidth;
   };
   function getPfasstHeight(\pfasstSteps) {
-    \predictHeight = (\numProc-1)*(\coarseHeight+\blockVSpace)+\coarseHeight;
-    if \pfasstSteps == 0 then {
-        return \predictHeight;
-    };
-    \h = (\pfasstSteps-1)*(\coarseHeight+\fineHeight+2*\blockVSpace)+\coarseHeight+\fineHeight+\blockVSpace;
-    return \h+\predictHeight;
+      \predictHeight = (\numProc-1)*(\coarseHeight+\blockVSpace)+\coarseHeight;
+      if \pfasstSteps == 0 then {
+          return \predictHeight;
+      };
+      \h = (\pfasstSteps-1)*(\coarseHeight+\fineHeight+2*\blockVSpace)+\coarseHeight+\fineHeight+\blockVSpace;
+      return \h+\predictHeight;
+  };
+  function getProcTickX(\proc) {
+      if \proc == 0 then {
+          return \blockWidth/2;
+      } else {
+          return \proc*(\blockWidth+\blockHSpace)+\blockWidth/2;
+      };
+  };
+  function getTimeTickX(\i) {
+      if \i == 0 then {
+          return -\blockHSpace/2;
+      } else {
+          return (\i-1)*(\blockWidth+\blockHSpace)+\blockWidth+\blockHSpace/2;
+      };
   };
 }
 
@@ -204,16 +218,13 @@
     \w = getPfasstWidth(0)+\axisHSpace;
     drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
     for \proc in {0, ..., \numProc-1}{
-        \x = 0;
-        if \proc == 0 then {
-          \x = \blockWidth/2;
-        } else {
-          \x = \proc*(\blockWidth+\blockHSpace)+\blockWidth/2;
-        };
+        \x = getProcTickX(\proc);
         drawProcTick(\x, \proc);
-        \x = \proc*(\blockWidth+\blockHSpace);
+        \x = getTimeTickX(\proc);
         drawTimeTick(\x, \proc);
     };
+    \x = getTimeTickX(\numProc);
+    drawTimeTick(\x, \numProc);
   };
   function drawYAxis(\pfasstSteps) {
     \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
