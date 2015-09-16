@@ -2,7 +2,11 @@
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 
-
+% TODO: rename procX1 -> blockX1, ...
+% TODO: unused val for unuesed parameters
+% TODO: FZJ corporate design
+% TODO: space for extra highlighting ?
+% TODO: brace and label for highlitght function
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -107,6 +111,11 @@
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
       { \node[rotate=90] at (-\axisHSpace-\ticksOffset, \y) { computation time }; };
+  };
+  %
+  %
+  function drawHightlightLine(\xa, \ya, \xb, \yb) {
+      { \draw (\xa,\ya) -- (\xb,\yb); };
   };
 }
 
@@ -290,6 +299,54 @@
       predict(0);
       for \step in {0, ..., \steps-1}{
           pfasstStep(\step);
+      };
+  };
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions to highlight parts of the algorithm %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzmath{
+  function highlightPredictor(\unused) {
+      for \proc in {0, ..., \numProc-1}{
+          % horizontal line
+          \xa = procX1(\proc);
+          \xb = procX2(\proc);
+          \ya = blockY(numPredictBlocks(\proc-1), 0)+\coarseHeight+\blockVSpace/2;
+          \yb = \ya;
+          drawHightlightLine(\xa, \ya, \xb, \yb);
+          if \proc != \numProc-1 then {
+              % diagonal line
+              \xa = procX2(\proc);
+              \xb = procX1(\proc+1);
+              \yb = \yb+\coarseHeight+\blockVSpace;
+              drawHightlightLine(\xa, \ya, \xb, \yb);
+          };
+      };
+  };
+  function highlightPfasstStep(\step) {
+      for \proc in {0, ..., \numProc-1}{
+          % horizontal line
+          \nCoarse = numPredictBlocks(\proc);
+          \nFine = 0;
+          if \step > 0 then {
+              \nCoarse = \nCoarse+\step+1;
+              \nFine = \step+1;
+          };
+          \xa = procX1(\proc);
+          \xb = procX2(\proc);
+          \ya = blockY(\nCoarse+1, \nFine)+\fineHeight+\blockVSpace/2;
+          \yb = \ya;
+          drawHightlightLine(\xa, \ya, \xb, \yb);
+          if \proc != \numProc-1 then {
+              % diagonal line
+              \xa = procX2(\proc);
+              \xb = procX1(\proc+1);
+              \yb = \yb+\coarseHeight+\blockVSpace;
+              drawHightlightLine(\xa, \ya, \xb, \yb);
+          };
       };
   };
 }

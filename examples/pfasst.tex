@@ -5,11 +5,14 @@
 \begin{document}
   \begin{tikzpicture}
     \tikzmath{
+      \blockVSpace = 0.2;
       predict(0);
-      drawAxes(2);
+      drawAxes(3);
       pfasstStep(0);
       pfasstStep(1);
       pfasstStepFine(2);
+      highlightPredictor(0);
+      highlightPfasstStep(0);
     }
   \end{tikzpicture}
 \end{document}
