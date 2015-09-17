@@ -3,10 +3,6 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 
-% TODO: space for extra highlighting ?
-% TODO: beamer example
-% TODO: legend
-
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
@@ -56,6 +52,12 @@
   %
   %
   \braceAmplitude = 3;
+  %
+  %
+  \legendBlockWidth = 0.5;
+  \legendBlockHeight = 0.5;
+  \legendBlockHSpace = 0.8;
+  \legendBlockVSpace = 0.5;
   %
   % variable to highlight that a value is not used
   \unused = 60000;
@@ -356,6 +358,19 @@
       \ya = 0;
       \yb = blockY(numPredictBlocks(\numProc-1)-1, 0)+\coarseHeight+\blockVSpace/2;
       drawHighlightBrace(\xa, \ya, \xb, \yb);
+  };
+  function legend(\x, \y, \width) {
+      { \fill[coarseColor] (\x,\y) rectangle (\x+\legendBlockWidth,\y+\legendBlockHeight); };
+      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse sweep}; };
+      \y = \y-\legendBlockHeight-\legendBlockVSpace;
+      { \fill[fineColor] (\x,\y) rectangle (\x+\legendBlockWidth,\y+\legendBlockHeight); };
+      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Fine sweep}; };
+      \y = \y-\legendBlockHeight-\legendBlockVSpace;
+      drawCoarseComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
+      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse comm}; };
+      \y = \y-\legendBlockHeight-\legendBlockVSpace;
+      drawFineComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
+      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Fine comm}; };
   };
 }
 
