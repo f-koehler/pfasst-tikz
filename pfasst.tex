@@ -2,7 +2,6 @@
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 
-% TODO: unused val for unuesed parameters
 % TODO: space for extra highlighting ?
 % TODO: brace and label for highlitght function
 % TODO: beamer example
@@ -53,6 +52,9 @@
   %
   % radius for the small circles at the end of comm arrows
   \commCircleRadius = 0.03;
+  %
+  % variable to highlight that a value is not used
+  \unused = 60000;
 }
 
 
@@ -307,7 +309,7 @@
   %
   % draw the full algorithm with a specified number of pfasst steps
   function pfasst(\steps) {
-      predict(0);
+      predict(\unused);
       for \step in {0, ..., \steps-1}{
           pfasstStep(\step);
       };
@@ -370,7 +372,7 @@
 \tikzmath{
   % draw the x-axis
   function drawXAxis(\unused) {
-      \w = getPfasstWidth(0)+\axisHSpace;
+      \w = getPfasstWidth(\unused)+\axisHSpace;
       drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
       for \proc in {0, ..., \numProc-1}{
           \x = getProcTickX(\proc);
@@ -389,7 +391,7 @@
   };
   % draw axes according to the number of pfasst steps and number of processors
   function drawAxes(\pfasstSteps) {
-      drawXAxis(0);
+      drawXAxis(\unused);
       drawYAxis(\pfasstSteps);
   };
 }
