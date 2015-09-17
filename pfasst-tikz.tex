@@ -14,10 +14,10 @@
   \numProc = 4;
   %
   % width of sweep blocks
-  \blockWidth = 3.6;
+  \blockWidth = 3.53;
   %
   % horizontal space between blocks
-  \blockHSpace = 1.7;
+  \blockHSpace = 1.63;
   %
   % vertical space between blocks
   \blockVSpace = 0.2;
@@ -59,16 +59,22 @@
   \braceLabelOffset = 2.5;
   %
   % width of blocks in the legend
-  \legendBlockWidth  = 0.5;
+  \legendBlockWidth  = 1.3;
   %
   % height of blocks in the legend
-  \legendBlockHeight = 0.5;
+  \legendBlockHeight = 1;
   %
-  % horizontal space between legend blocks and their labels
-  \legendBlockHSpace = 0.8;
+  % horizontal space between legend blocks and their labels (somewhat), must be adjusted by trial and error for a certain \legendLabelWidth
+  \legendBlockHSpace = 1.8;
   %
   % vertical space between legend blocks
-  \legendBlockVSpace = 0.5;
+  \legendBlockVSpace = 1.8;
+  %
+  % horizontal space between drawing and legend
+  \legendHSpace = 1.5;
+  %
+  % max width of a legend label
+  \legendLabelWidth = 3;
   %
   % variable to highlight that a value is not used
   \unused = 60000;
@@ -379,19 +385,37 @@
   };
   %
   % draw a legend
-  % function legend(\x, \y, \width) {
-  %     { \fill[coarseColor] (\x em,\y em) rectangle (\x+\legendBlockWidth em,\y+\legendBlockHeight em); };
-  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Coarse sweep}; };
-  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
-  %     { \fill[fineColor] (\x em,\y em) rectangle (\x+\legendBlockWidth em,\y+\legendBlockHeight em); };
-  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Fine sweep}; };
-  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
-  %     drawCoarseComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
-  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse comm}; };
-  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
-  %     drawFineComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
-  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Fine comm}; };
-  % };
+  function legend(\pfasstSteps) {
+      \baseX = getPfasstWidth(\unused)+\legendHSpace;
+      % \baseY = getPfasstHeight(\pfasstSteps)-\legendBlockHeight;
+      \baseY = getPfasstHeight(\pfasstSteps);
+      \xa = \baseX;
+      \ya = \baseY;
+      \xb = \baseX+\legendBlockWidth;
+      \yb = \baseY-\legendBlockHeight;
+      { \fill[coarseColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
+      \xl = \xb+\legendBlockHSpace;
+      \yl = (\ya+\yb)/2;
+      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Sweep}; };
+      \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
+      \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
+      { \fill[fineColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
+      \xl = \xb+\legendBlockHSpace;
+      \yl = (\ya+\yb)/2;
+      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Sweep}; };
+      \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
+      \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
+      drawCoarseComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
+      \xl = \xb+\legendBlockHSpace;
+      \yl = (\ya+\yb)/2;
+      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Comm}; };
+      \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
+      \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
+      drawFineComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
+      \xl = \xb+\legendBlockHSpace;
+      \yl = (\ya+\yb)/2;
+      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Comm}; };
+  };
 }
 
 
