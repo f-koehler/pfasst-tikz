@@ -4,9 +4,9 @@
 
 % TODO: rename procX1 -> blockX1, ...
 % TODO: unused val for unuesed parameters
-% TODO: FZJ corporate design
 % TODO: space for extra highlighting ?
 % TODO: brace and label for highlitght function
+% TODO: beamer example
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -56,18 +56,30 @@
   \commCircleRadius = 0.03;
 }
 
+
+
+%%%%%%%%%%%%%%%%%
+% Define colors %
+%%%%%%%%%%%%%%%%%
+\definecolor{coarseColor}{RGB}{175,90,80}
+\definecolor{fineColor}{RGB}{110,159,189}
+\definecolor{coarseCommColor}{RGB}{80,80,80}
+\definecolor{fineCommColor}{RGB}{125,150,110}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % draw functions for elements (blocks, lines, ...) %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
   % specify how coarse sweep blocks will be drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-      { \filldraw[draw=black,fill=red] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[fill=coarseColor] (\xa, \ya) rectangle (\xb, \yb); };
   };
   %
   % specify how fine sweep blocks will be drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-      { \filldraw[draw=black,fill=blue] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[fill=fineColor] (\xa, \ya) rectangle (\xb, \yb); };
   };
   %
   % specify how axes are drawn
@@ -91,20 +103,20 @@
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
       \xh = (\coarseCommRatio*\xb+(1-\coarseCommRatio)*\xa);
       \yh = (\coarseCommRatio*\yb+(1-\coarseCommRatio)*\ya);
-      { \draw[thick,-{Triangle[open]}] (\xa,\ya) -- (\xh,\yh); };
-      { \draw[thick] (\xh,\yh) -- (\xb,\yb); };
-      { \fill[draw=black,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
-      { \fill[draw=black,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
+      { \draw[thick,-{Triangle[open]},coarseCommColor] (\xa,\ya) -- (\xh,\yh); };
+      { \draw[thick, coarseCommColor] (\xh,\yh) -- (\xb,\yb); };
+      { \fill[draw=coarseCommColor,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
+      { \fill[draw=coarseCommColor,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
   };
   %
   % draw fine communication
   function drawFineComm(\xa, \ya, \xb, \yb) {
       \xh = (\fineCommRatio*\xb+(1-\fineCommRatio)*\xa);
       \yh = (\fineCommRatio*\yb+(1-\fineCommRatio)*\ya);
-      { \draw[thick, -{Triangle[open]},>=latex,black!60!green] (\xa,\ya) -- (\xh,\yh); };
-      { \draw[thick, black!60!green] (\xh,\yh) -- (\xb,\yb); };
-      { \fill[draw=black!60!green,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
-      { \fill[draw=black!60!green,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
+      { \draw[thick, -{Triangle[open]},>=latex,fineCommColor] (\xa,\ya) -- (\xh,\yh); };
+      { \draw[thick, fineCommColor] (\xh,\yh) -- (\xb,\yb); };
+      { \fill[draw=fineCommColor,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
+      { \fill[draw=fineCommColor,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
   };
   %
   % label the y axis
