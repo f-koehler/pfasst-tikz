@@ -1,10 +1,12 @@
 % Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
 
 % TODO: space for extra highlighting ?
 % TODO: brace and label for highlitght function
 % TODO: beamer example
+% TODO: legend
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -53,6 +55,9 @@
   % radius for the small circles at the end of comm arrows
   \commCircleRadius = 0.03;
   %
+  %
+  \braceAmplitude = 3;
+  %
   % variable to highlight that a value is not used
   \unused = 60000;
 }
@@ -64,8 +69,10 @@
 %%%%%%%%%%%%%%%%%
 \definecolor{coarseColor}{RGB}{175,90,80}
 \definecolor{fineColor}{RGB}{110,159,189}
+\definecolor{textColor}{RGB}{70,70,70}
 \definecolor{coarseCommColor}{RGB}{80,80,80}
 \definecolor{fineCommColor}{RGB}{125,150,110}
+\definecolor{highlightColor}{RGB}{102,102,102}
 
 
 
@@ -85,19 +92,19 @@
   %
   % specify how axes are drawn
   function drawAxis(\xa, \ya, \xb, \yb) {
-      { \draw[->,>=latex,thick] (\xa, \ya) -- (\xb, \yb); };
+      { \draw[->,>=latex,thick,textColor] (\xa, \ya) -- (\xb, \yb); };
   };
   %
   % draw a label tick for a processor
   function drawProcTick(\x, \proc) {
-      { \draw (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
-      { \node at (\x,-\ticksLength-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
+      { \draw[textColor] (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
+      { \node[text=textColor] at (\x,-\ticksLength-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
   };
   %
   % draw a labeled tick for a time step
   function drawTimeTick(\x, \i) {
-      { \draw (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
-      { \node[text=black!60!white] at (\x,-\ticksLength-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
+      { \draw[highlightColor] (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
+      { \node[text=highlightColor] at (\x,-\ticksLength-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   %
   % draw coarse communication
@@ -123,12 +130,19 @@
   % label the y axis
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
-      { \node[rotate=90] at (-\axisHSpace-\ticksOffset, \y) { computation time }; };
+      { \node[text=textColor, rotate=90] at (-\axisHSpace-\ticksOffset, \y) { computation time }; };
   };
   %
   %
   function drawHightlightLine(\xa, \ya, \xb, \yb) {
-      { \draw (\xa,\ya) -- (\xb,\yb); };
+      { \draw[thick, highlightColor, dashed] (\xa,\ya) -- (\xb,\yb); };
+  };
+  %
+  %
+  function drawHighlightBrace(\xa, \ya, \xb, \yb) {
+      { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,highlightColor] (\xa,\ya) -- (\xb,\yb); };
+      \y = (\ya+\yb)/2;
+      { \node[text=highlightColor] at (\xa+1, \y){predictor}; };
   };
 }
 
@@ -338,29 +352,11 @@
               drawHightlightLine(\xa, \ya, \xb, \yb);
           };
       };
-  };
-  function highlightPfasstStep(\step) {
-      for \proc in {0, ..., \numProc-1}{
-          % horizontal line
-          \nCoarse = numPredictBlocks(\proc);
-          \nFine = 0;
-          if \step > 0 then {
-              \nCoarse = \nCoarse+\step+1;
-              \nFine = \step+1;
-          };
-          \xa = blockX1(\proc);
-          \xb = blockX2(\proc);
-          \ya = blockY(\nCoarse+1, \nFine)+\fineHeight+\blockVSpace/2;
-          \yb = \ya;
-          drawHightlightLine(\xa, \ya, \xb, \yb);
-          if \proc != \numProc-1 then {
-              % diagonal line
-              \xa = blockX2(\proc);
-              \xb = blockX1(\proc+1);
-              \yb = \yb+\coarseHeight+\blockVSpace;
-              drawHightlightLine(\xa, \ya, \xb, \yb);
-          };
-      };
+      \xa = blockX2(\numProc-1)+\blockHSpace/4;
+      \xb = \xa;
+      \ya = 0;
+      \yb = blockY(numPredictBlocks(\numProc-1)-1, 0)+\coarseHeight+\blockVSpace/2;
+      drawHighlightBrace(\xa, \ya, \xb, \yb);
   };
 }
 
