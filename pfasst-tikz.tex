@@ -29,8 +29,7 @@
   \fineHeight = 2.1;
   %
   % spacing between y-axis and pfasst drawing
-  % TODO: on the left there is too much space
-  \axisHSpace = 1.001*\blockHSpace;
+  \axisHSpace = 0.2;
   %
   % spacing between x-axis and pfasst drawing
   \axisVSpace = 0.15;
@@ -147,7 +146,7 @@
   % label the y axis
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
-      \tmp = -\axisHSpace-\ticksOffset;
+      \tmp = getTimeTickX(0)-\axisHSpace-\ticksOffset;
       { \node[text=textColor, rotate=90, font=\normalsize] at (\tmp em, \y em) { computation time }; };
   };
   %
@@ -411,13 +410,12 @@
       };
       \x = getTimeTickX(\numProc);
       drawTimeTick(\x, \numProc);
-      \w = getPfasstWidth(\unused)+\axisHSpace;
-      drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
+      drawAxis(getTimeTickX(0)-\axisHSpace, -\axisVSpace, getTimeTickX(\numProc)+10*\axisHSpace, -\axisVSpace);
   };
   % draw the y axis according to the number of pfasst steps
   function drawYAxis(\pfasstSteps) {
       \h = getPfasstHeight(\pfasstSteps)+\axisVSpace;
-      drawAxis(-\axisHSpace, -\axisVSpace, -\axisHSpace, \h);
+      drawAxis(getTimeTickX(0)-\axisHSpace, -\axisVSpace, getTimeTickX(0)-\axisHSpace, \h);
       labelYAxis(\pfasstSteps);
   };
   % draw axes according to the number of pfasst steps and number of processors
