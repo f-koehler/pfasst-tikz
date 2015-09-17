@@ -2,7 +2,6 @@
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 
-% TODO: rename procX1 -> blockX1, ...
 % TODO: unused val for unuesed parameters
 % TODO: space for extra highlighting ?
 % TODO: brace and label for highlitght function
@@ -138,7 +137,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
   % get the x coordinate where a process starts
-  function procX1(\proc) {
+  function blockX1(\proc) {
       if \proc == 0 then {
         return \proc*\blockWidth;
       } else {
@@ -147,7 +146,7 @@
   };
   %
   % get the x coordinate where a process ends
-  function procX2(\proc) {
+  function blockX2(\proc) {
       if \proc == 0 then {
           return (\proc+1)*\blockWidth;
       } else {
@@ -217,17 +216,17 @@
   % draw a coarse sweep block on stack of a certain processor that contains
   % a given number of coarse and fine blocks
   function coarseSweep(\proc, \nCoarse, \nFine) {
-      \xa = procX1(\proc);
-      \xb = procX2(\proc);
+      \xa = blockX1(\proc);
+      \xb = blockX2(\proc);
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\coarseHeight;
       drawCoarseSweep(\xa, \ya, \xb, \yb);
       if \drawComm == 1 then {
           if \proc > 0 then {
               if \nCoarse > 0 then {
-                  \xa = procX2(\proc-1);
+                  \xa = blockX2(\proc-1);
                   \ya = blockY(\nCoarse-1, \nFine)+\coarseHeight;
-                  \xb = procX1(\proc);
+                  \xb = blockX1(\proc);
                   \yb = blockY(\nCoarse, \nFine);
                   drawCoarseComm(\xa,\ya,\xb,\yb);
               };
@@ -238,17 +237,17 @@
   % draw a fine sweep block on stack of a certain processor that contains
   % a given number of coarse and fine blocks
   function fineSweep(\proc, \nCoarse, \nFine) {
-      \xa = procX1(\proc);
-      \xb = procX2(\proc);
+      \xa = blockX1(\proc);
+      \xb = blockX2(\proc);
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\fineHeight;
       drawFineSweep(\xa, \ya, \xb, \yb);
       if \drawComm == 1 then {
           if \proc > 0 then {
               if \nFine > 0 then {
-                  \xa = procX2(\proc-1);
+                  \xa = blockX2(\proc-1);
                   \ya = blockY(\nCoarse-2, \nFine-1)+\fineHeight;
-                  \xb = procX1(\proc);
+                  \xb = blockX1(\proc);
                   \yb = blockY(\nCoarse, \nFine);
                   drawFineComm(\xa, \ya, \xb, \yb);
               };
@@ -324,15 +323,15 @@
   function highlightPredictor(\unused) {
       for \proc in {0, ..., \numProc-1}{
           % horizontal line
-          \xa = procX1(\proc);
-          \xb = procX2(\proc);
+          \xa = blockX1(\proc);
+          \xb = blockX2(\proc);
           \ya = blockY(numPredictBlocks(\proc-1), 0)+\coarseHeight+\blockVSpace/2;
           \yb = \ya;
           drawHightlightLine(\xa, \ya, \xb, \yb);
           if \proc != \numProc-1 then {
               % diagonal line
-              \xa = procX2(\proc);
-              \xb = procX1(\proc+1);
+              \xa = blockX2(\proc);
+              \xb = blockX1(\proc+1);
               \yb = \yb+\coarseHeight+\blockVSpace;
               drawHightlightLine(\xa, \ya, \xb, \yb);
           };
@@ -347,15 +346,15 @@
               \nCoarse = \nCoarse+\step+1;
               \nFine = \step+1;
           };
-          \xa = procX1(\proc);
-          \xb = procX2(\proc);
+          \xa = blockX1(\proc);
+          \xb = blockX2(\proc);
           \ya = blockY(\nCoarse+1, \nFine)+\fineHeight+\blockVSpace/2;
           \yb = \ya;
           drawHightlightLine(\xa, \ya, \xb, \yb);
           if \proc != \numProc-1 then {
               % diagonal line
-              \xa = procX2(\proc);
-              \xb = procX1(\proc+1);
+              \xa = blockX2(\proc);
+              \xb = blockX1(\proc+1);
               \yb = \yb+\coarseHeight+\blockVSpace;
               drawHightlightLine(\xa, \ya, \xb, \yb);
           };
