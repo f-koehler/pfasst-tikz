@@ -4,7 +4,7 @@ EXAMPLES_SVG:=$(addsuffix .svg, ${EXAMPLES})
 
 all: ${EXAMPLES_PDF}
 svg: ${EXAMPLES_SVG}
-%.pdf: %.tex ../pfasst.tex
+%.pdf: %.tex ../pfasst-tikz.tex
 	latexmk -pdf $<
 	pdfcrop --hires $@ $@
 %.svg: %.pdf
