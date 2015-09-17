@@ -56,6 +56,9 @@
   % amplitude of the brace used to highlight the predictor
   \braceAmplitude = 3;
   %
+  % offset between brace and label
+  \braceLabelOffset = 2.5;
+  %
   % width of blocks in the legend
   \legendBlockWidth  = 0.5;
   %
@@ -157,8 +160,7 @@
   function drawHighlightBrace(\xa, \ya, \xb, \yb) {
       { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,highlightColor] (\xa em,\ya em) -- (\xb em,\yb em); };
       \y = (\ya+\yb)/2;
-      % TODO: hard coded offset?
-      \tmp = \xa+2.5;
+      \tmp = \xa+\braceLabelOffset;
       { \node[text=highlightColor, font=\normalsize] at (\tmp em,\y em){predictor}; };
   };
 }
