@@ -1,0 +1,38 @@
+\documentclass{beamer}
+\usepackage{tikz}
+\input{../pfasst.tex}
+
+\begin{document}
+    \begin{frame}
+      \frametitle{PFASST Algorithm}
+      \begin{center}
+        \resizebox{\columnwidth}{!}{%
+        \begin{tikzpicture}
+          \tikzmath{
+            drawAxes(3);
+            { \pause };
+            predictStep(0);
+            { \pause };
+            predictStep(1);
+            { \pause };
+            predictStep(2);
+            { \pause };
+            predictStep(3);
+            { \pause };
+            highlightPredictor(\unused);
+            { \pause };
+            pfasstStepFine(0);
+            { \pause };
+            pfasstStepCoarse(0);
+            { \pause };
+            pfasstStepFine(1);
+            { \pause };
+            pfasstStepCoarse(1);
+            { \pause };
+            pfasstStep(2);
+          }
+        \end{tikzpicture}
+      }
+    \end{center}
+    \end{frame}
+\end{document}
