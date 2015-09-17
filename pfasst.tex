@@ -50,13 +50,19 @@
   % radius for the small circles at the end of comm arrows
   \commCircleRadius = 0.03;
   %
-  %
+  % amplitude of the brace used to highlight the predictor
   \braceAmplitude = 3;
   %
+  % width of blocks in the legend
+  \legendBlockWidth  = 0.5;
   %
-  \legendBlockWidth = 0.5;
+  % height of blocks in the legend
   \legendBlockHeight = 0.5;
+  %
+  % horizontal space between legend blocks and their labels
   \legendBlockHSpace = 0.8;
+  %
+  % vertical space between legend blocks
   \legendBlockVSpace = 0.5;
   %
   % variable to highlight that a value is not used
@@ -337,6 +343,7 @@
 % Functions to highlight parts of the algorithm %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
+  % highlight the predictor
   function highlightPredictor(\unused) {
       for \proc in {0, ..., \numProc-1}{
           % horizontal line
@@ -359,6 +366,8 @@
       \yb = blockY(numPredictBlocks(\numProc-1)-1, 0)+\coarseHeight+\blockVSpace/2;
       drawHighlightBrace(\xa, \ya, \xb, \yb);
   };
+  %
+  % draw a legend
   function legend(\x, \y, \width) {
       { \fill[coarseColor] (\x,\y) rectangle (\x+\legendBlockWidth,\y+\legendBlockHeight); };
       { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse sweep}; };
