@@ -3,6 +3,8 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 
+% TODO: relative legend
+
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
@@ -12,40 +14,41 @@
   \numProc = 4;
   %
   % width of sweep blocks
-  \blockWidth = 1.8;
+  \blockWidth = 3.6;
   %
   % horizontal space between blocks
-  \blockHSpace = 0.9;
+  \blockHSpace = 1.7;
   %
   % vertical space between blocks
-  \blockVSpace = 0.08;
+  \blockVSpace = 0.2;
   %
   % height of coarse sweep blocks
-  \coarseHeight = 0.4;
+  \coarseHeight = 0.9;
   %
   % height of fine sweep blocks
-  \fineHeight = 1.3;
+  \fineHeight = 2.1;
   %
   % spacing between y-axis and pfasst drawing
+  % TODO: on the left there is too much space
   \axisHSpace = 1.001*\blockHSpace;
   %
   % spacing between x-axis and pfasst drawing
   \axisVSpace = 0.15;
   %
   % length of ticks
-  \ticksLength = 0.1;
+  \ticksLength = 0.4;
   %
   % offset for ticks labels
-  \ticksOffset = 0.4;
+  \ticksOffset = 0.8;
   %
   % if drawComm == 1 the arrows for communication will be drawn
   \drawComm = 1;
   %
   % ratio at which the triangle for coarse comm arrows will be drawn
-  \coarseCommRatio = 0.4;
+  \coarseCommRatio = 0.45;
   %
   % ratio at which the triangle for fine comm arrows will be drawn
-  \fineCommRatio = 0.8;
+  \fineCommRatio = 0.85;
   %
   % radius for the small circles at the end of comm arrows
   \commCircleRadius = 0.03;
@@ -89,67 +92,74 @@
 \tikzmath{
   % specify how coarse sweep blocks will be drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-      { \fill[fill=coarseColor] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[fill=coarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how fine sweep blocks will be drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-      { \fill[fill=fineColor] (\xa, \ya) rectangle (\xb, \yb); };
+      { \fill[fill=fineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how axes are drawn
   function drawAxis(\xa, \ya, \xb, \yb) {
-      { \draw[->,>=latex,thick,textColor] (\xa, \ya) -- (\xb, \yb); };
+      { \draw[->,>=latex,thick,textColor] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   % draw a label tick for a processor
   function drawProcTick(\x, \proc) {
-      { \draw[textColor] (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
-      { \node[text=textColor] at (\x,-\ticksLength-\ticksOffset) {$P_{\pgfmathprintnumber{\proc}}$}; };
+      \tmp = -\axisVSpace-\ticksLength;
+      { \draw[textColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
+      \tmp = -\ticksLength-\ticksOffset;
+      { \node[text=textColor,font=\normalsize] at (\x em,\tmp em) {$P_{\pgfmathprintnumber{\proc}}$}; };
   };
   %
   % draw a labeled tick for a time step
   function drawTimeTick(\x, \i) {
-      { \draw[highlightColor] (\x, -\axisVSpace) -- (\x, -\axisVSpace-\ticksLength); };
-      { \node[text=highlightColor] at (\x,-\ticksLength-\ticksOffset) {$t_{\pgfmathprintnumber{\i}}$}; };
+      \tmp = -\axisVSpace-\ticksLength;
+      { \draw[highlightColor] (\x em,-\axisVSpace em) -- (\x em,\tmp em); };
+      \tmp = -\ticksLength-\ticksOffset;
+      { \node[text=highlightColor] at (\x em,\tmp em) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   %
   % draw coarse communication
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
       \xh = (\coarseCommRatio*\xb+(1-\coarseCommRatio)*\xa);
       \yh = (\coarseCommRatio*\yb+(1-\coarseCommRatio)*\ya);
-      { \draw[thick,-{Triangle[open]},coarseCommColor] (\xa,\ya) -- (\xh,\yh); };
-      { \draw[thick, coarseCommColor] (\xh,\yh) -- (\xb,\yb); };
-      { \fill[draw=coarseCommColor,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
-      { \fill[draw=coarseCommColor,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
+      { \draw[thick,-{Triangle[open]},coarseCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
+      { \draw[thick, coarseCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
+      { \fill[draw=coarseCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
+      { \fill[draw=coarseCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
   };
   %
   % draw fine communication
   function drawFineComm(\xa, \ya, \xb, \yb) {
       \xh = (\fineCommRatio*\xb+(1-\fineCommRatio)*\xa);
       \yh = (\fineCommRatio*\yb+(1-\fineCommRatio)*\ya);
-      { \draw[thick, -{Triangle[open]},>=latex,fineCommColor] (\xa,\ya) -- (\xh,\yh); };
-      { \draw[thick, fineCommColor] (\xh,\yh) -- (\xb,\yb); };
-      { \fill[draw=fineCommColor,fill=white] (\xa,\ya) circle[radius=\commCircleRadius]; };
-      { \fill[draw=fineCommColor,fill=white] (\xb,\yb) circle[radius=\commCircleRadius]; };
+      { \draw[thick, -{Triangle[open]},>=latex,fineCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
+      { \draw[thick, fineCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
+      { \fill[draw=fineCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
+      { \fill[draw=fineCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
   };
   %
   % label the y axis
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
-      { \node[text=textColor, rotate=90] at (-\axisHSpace-\ticksOffset, \y) { computation time }; };
+      \tmp = -\axisHSpace-\ticksOffset;
+      { \node[text=textColor, rotate=90, font=\normalsize] at (\tmp em, \y em) { computation time }; };
   };
   %
   %
   function drawHightlightLine(\xa, \ya, \xb, \yb) {
-      { \draw[thick, highlightColor, dashed] (\xa,\ya) -- (\xb,\yb); };
+      { \draw[thick, highlightColor, dashed] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   %
   function drawHighlightBrace(\xa, \ya, \xb, \yb) {
-      { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,highlightColor] (\xa,\ya) -- (\xb,\yb); };
+      { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,highlightColor] (\xa em,\ya em) -- (\xb em,\yb em); };
       \y = (\ya+\yb)/2;
-      { \node[text=highlightColor] at (\xa+1, \y){predictor}; };
+      % TODO: hard coded offset?
+      \tmp = \xa+2.5;
+      { \node[text=highlightColor, font=\normalsize] at (\tmp em,\y em){predictor}; };
   };
 }
 
@@ -368,19 +378,19 @@
   };
   %
   % draw a legend
-  function legend(\x, \y, \width) {
-      { \fill[coarseColor] (\x,\y) rectangle (\x+\legendBlockWidth,\y+\legendBlockHeight); };
-      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse sweep}; };
-      \y = \y-\legendBlockHeight-\legendBlockVSpace;
-      { \fill[fineColor] (\x,\y) rectangle (\x+\legendBlockWidth,\y+\legendBlockHeight); };
-      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Fine sweep}; };
-      \y = \y-\legendBlockHeight-\legendBlockVSpace;
-      drawCoarseComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
-      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse comm}; };
-      \y = \y-\legendBlockHeight-\legendBlockVSpace;
-      drawFineComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
-      { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Fine comm}; };
-  };
+  % function legend(\x, \y, \width) {
+  %     { \fill[coarseColor] (\x em,\y em) rectangle (\x+\legendBlockWidth em,\y+\legendBlockHeight em); };
+  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Coarse sweep}; };
+  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
+  %     { \fill[fineColor] (\x em,\y em) rectangle (\x+\legendBlockWidth em,\y+\legendBlockHeight em); };
+  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Fine sweep}; };
+  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
+  %     drawCoarseComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
+  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace,\y+\legendBlockHeight/2){Coarse comm}; };
+  %     \y = \y-\legendBlockHeight-\legendBlockVSpace;
+  %     drawFineComm(\x, \y+\legendBlockHeight/2, \x+\legendBlockWidth, \y+\legendBlockHeight/2);
+  %     { \node[align=left,text width=\width] at (\x+\legendBlockWidth+\legendBlockHSpace em,\y+\legendBlockHeight/2 em){Fine comm}; };
+  % };
 }
 
 
@@ -391,8 +401,6 @@
 \tikzmath{
   % draw the x-axis
   function drawXAxis(\unused) {
-      \w = getPfasstWidth(\unused)+\axisHSpace;
-      drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
       for \proc in {0, ..., \numProc-1}{
           \x = getProcTickX(\proc);
           drawProcTick(\x, \proc);
@@ -401,6 +409,8 @@
       };
       \x = getTimeTickX(\numProc);
       drawTimeTick(\x, \numProc);
+      \w = getPfasstWidth(\unused)+\axisHSpace;
+      drawAxis(-\axisHSpace, -\axisVSpace, \w, -\axisVSpace);
   };
   % draw the y axis according to the number of pfasst steps
   function drawYAxis(\pfasstSteps) {
