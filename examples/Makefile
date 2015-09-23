@@ -1,4 +1,4 @@
-EXAMPLES=pfasst manysteps predictstep fullpredict manualpredict beamer
+EXAMPLES=pfasst manysteps predictstep fullpredict manualpredict beamer ghost
 EXAMPLES_PDF:=$(addsuffix .pdf, ${EXAMPLES})
 EXAMPLES_SVG:=$(addsuffix .svg, ${EXAMPLES})
 
@@ -12,4 +12,4 @@ svg: ${EXAMPLES_SVG}
 
 .PHONY: clean
 clean:
-	rm -f *.aux *.log *.pdf *.svg *.fdb_latexmk *.fls
+	rm -f *.aux *.log *.pdf *.svg *.fdb_latexmk *.fls *.out *.nav *.toc *.snm

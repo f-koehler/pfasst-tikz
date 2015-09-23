@@ -3,7 +3,7 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 
-
+% TODO: try anchor=west for legend labels
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -91,6 +91,7 @@
 \definecolor{coarseCommColor}{RGB}{80,80,80}
 \definecolor{fineCommColor}{RGB}{125,150,110}
 \definecolor{highlightColor}{RGB}{102,102,102}
+\definecolor{ghostColor}{RGB}{80,80,80}
 
 
 
@@ -98,14 +99,19 @@
 % draw functions for elements (blocks, lines, ...) %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{
-  % specify how coarse sweep blocks will be drawn
+  % specify how coarse sweep blocks are drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
       { \fill[fill=coarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
-  % specify how fine sweep blocks will be drawn
+  % specify how fine sweep blocks are drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
       { \fill[fill=fineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
+  };
+  %
+  % specify how ghost blocks are drawn
+  function drawGhost(\xa, \ya, \xb, \yb) {
+      { \draw[thick,dotted,ghostColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how axes are drawn
@@ -293,6 +299,26 @@
               };
           };
       };
+  };
+  %
+  % draw a ghost of a coarse sweep on the stack of a certain processor that
+  % contains a given number of coarse and fine blocks
+  function ghostCoarse(\proc, \nCoarse, \nFine) {
+    \xa = blockX1(\proc);
+    \xb = blockX2(\proc);
+    \ya = blockY(\nCoarse, \nFine);
+    \yb = \ya+\coarseHeight;
+    drawGhost(\xa, \ya, \xb, \yb);
+  };
+  %
+  % draw a ghost of a fine sweep on the stack of a certain processor that
+  % contains a given number of coarse and fine blocks
+  function ghostFine(\proc, \nCoarse, \nFine) {
+      \xa = blockX1(\proc);
+      \xb = blockX2(\proc);
+      \ya = blockY(\nCoarse, \nFine);
+      \yb = \ya+\fineHeight;
+      drawGhost(\xa, \ya, \xb, \yb);
   };
 }
 
