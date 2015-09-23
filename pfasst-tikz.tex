@@ -3,8 +3,6 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 
-% TODO: try anchor=west for legend labels
-
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
@@ -85,13 +83,13 @@
 %%%%%%%%%%%%%%%%%
 % Define colors %
 %%%%%%%%%%%%%%%%%
-\definecolor{coarseColor}{RGB}{175,90,80}
-\definecolor{fineColor}{RGB}{110,159,189}
-\definecolor{textColor}{RGB}{70,70,70}
-\definecolor{coarseCommColor}{RGB}{80,80,80}
-\definecolor{fineCommColor}{RGB}{125,150,110}
-\definecolor{highlightColor}{RGB}{102,102,102}
-\definecolor{ghostColor}{RGB}{80,80,80}
+\definecolor{pfasstCoarseColor}{RGB}{175,90,80}
+\definecolor{pfasstFineColor}{RGB}{110,159,189}
+\definecolor{pfasstTextColor}{RGB}{70,70,70}
+\definecolor{pfasstCoarseCommColor}{RGB}{80,80,80}
+\definecolor{pfasstFineCommColor}{RGB}{125,150,110}
+\definecolor{pfasstHighlightColor}{RGB}{102,102,102}
+\definecolor{pfasstGhostColor}{RGB}{80,80,80}
 
 
 
@@ -101,78 +99,78 @@
 \tikzmath{
   % specify how coarse sweep blocks are drawn
   function drawCoarseSweep(\xa, \ya, \xb, \yb) {
-      { \fill[fill=coarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
+      { \fill[fill=pfasstCoarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how fine sweep blocks are drawn
   function drawFineSweep(\xa, \ya, \xb, \yb) {
-      { \fill[fill=fineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
+      { \fill[fill=pfasstFineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how ghost blocks are drawn
   function drawGhost(\xa, \ya, \xb, \yb) {
-      { \draw[thick,dotted,ghostColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
+      { \draw[thick,dotted,pfasstGhostColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how axes are drawn
   function drawAxis(\xa, \ya, \xb, \yb) {
-      { \draw[->,>=latex,thick,textColor] (\xa em,\ya em) -- (\xb em,\yb em); };
+      { \draw[->,>=latex,thick,pfasstTextColor] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   % draw a label tick for a processor
   function drawProcTick(\x, \proc) {
       \tmp = -\axisVSpace-\ticksLength;
-      { \draw[textColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
+      { \draw[pfasstTextColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
       \tmp = -\ticksLength-\ticksOffset;
-      { \node[text=textColor,font=\normalsize] at (\x em,\tmp em) {$P_{\pgfmathprintnumber{\proc}}$}; };
+      { \node[text=pfasstTextColor,font=\normalsize] at (\x em,\tmp em) {$P_{\pgfmathprintnumber{\proc}}$}; };
   };
   %
   % draw a labeled tick for a time step
   function drawTimeTick(\x, \i) {
       \tmp = -\axisVSpace-\ticksLength;
-      { \draw[highlightColor] (\x em,-\axisVSpace em) -- (\x em,\tmp em); };
+      { \draw[pfasstHighlightColor] (\x em,-\axisVSpace em) -- (\x em,\tmp em); };
       \tmp = -\ticksLength-\ticksOffset;
-      { \node[text=highlightColor] at (\x em,\tmp em) {$t_{\pgfmathprintnumber{\i}}$}; };
+      { \node[text=pfasstHighlightColor] at (\x em,\tmp em) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   %
   % draw coarse communication
   function drawCoarseComm(\xa, \ya, \xb, \yb) {
       \xh = (\coarseCommRatio*\xb+(1-\coarseCommRatio)*\xa);
       \yh = (\coarseCommRatio*\yb+(1-\coarseCommRatio)*\ya);
-      { \draw[thick,-{Triangle[open]},coarseCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
-      { \draw[thick, coarseCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
-      { \fill[draw=coarseCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
-      { \fill[draw=coarseCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
+      { \draw[thick,-{Triangle[open]},pfasstCoarseCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
+      { \draw[thick, pfasstCoarseCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
+      { \fill[draw=pfasstCoarseCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
+      { \fill[draw=pfasstCoarseCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
   };
   %
   % draw fine communication
   function drawFineComm(\xa, \ya, \xb, \yb) {
       \xh = (\fineCommRatio*\xb+(1-\fineCommRatio)*\xa);
       \yh = (\fineCommRatio*\yb+(1-\fineCommRatio)*\ya);
-      { \draw[thick, -{Triangle[open]},>=latex,fineCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
-      { \draw[thick, fineCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
-      { \fill[draw=fineCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
-      { \fill[draw=fineCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
+      { \draw[thick, -{Triangle[open]},>=latex,pfasstFineCommColor] (\xa em,\ya em) -- (\xh em,\yh em); };
+      { \draw[thick, pfasstFineCommColor] (\xh em,\yh em) -- (\xb em,\yb em); };
+      { \fill[draw=pfasstFineCommColor,fill=white] (\xa em,\ya em) circle[radius=\commCircleRadius]; };
+      { \fill[draw=pfasstFineCommColor,fill=white] (\xb em,\yb em) circle[radius=\commCircleRadius]; };
   };
   %
   % label the y axis
   function labelYAxis(\pfasstSteps) {
       \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
       \tmp = getTimeTickX(0)-\axisHSpace-\ticksOffset;
-      { \node[text=textColor, rotate=90, font=\normalsize] at (\tmp em, \y em) { computation time }; };
+      { \node[text=pfasstTextColor, rotate=90, font=\normalsize] at (\tmp em, \y em) { computation time }; };
   };
   %
   %
   function drawHightlightLine(\xa, \ya, \xb, \yb) {
-      { \draw[thick, highlightColor, dashed] (\xa em,\ya em) -- (\xb em,\yb em); };
+      { \draw[thick, pfasstHighlightColor, dashed] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   %
   function drawHighlightBrace(\xa, \ya, \xb, \yb) {
-      { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,highlightColor] (\xa em,\ya em) -- (\xb em,\yb em); };
+      { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,pfasstHighlightColor] (\xa em,\ya em) -- (\xb em,\yb em); };
       \y = (\ya+\yb)/2;
       \tmp = \xa+\braceLabelOffset;
-      { \node[text=highlightColor, font=\normalsize] at (\tmp em,\y em){predictor}; };
+      { \node[text=pfasstHighlightColor, font=\normalsize] at (\tmp em,\y em){predictor}; };
   };
 }
 
@@ -419,28 +417,28 @@
       \ya = \baseY;
       \xb = \baseX+\legendBlockWidth;
       \yb = \baseY-\legendBlockHeight;
-      { \fill[coarseColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
+      { \fill[pfasstCoarseColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Sweep}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Sweep}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
-      { \fill[fineColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
+      { \fill[pfasstFineColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Sweep}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Sweep}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
       drawCoarseComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Comm}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Comm}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
       drawFineComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=textColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Comm}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Comm}; };
   };
 }
 
