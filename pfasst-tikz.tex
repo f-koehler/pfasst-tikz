@@ -7,7 +7,7 @@
 % Configuration %
 %%%%%%%%%%%%%%%%%
 % config variables
-\tikzmath{
+\tikzmath{%
   % number of processors in the diagram (not used in manual block drawing)
   \numProc = 4;
   %
@@ -18,13 +18,13 @@
   \blockHSpace = 1.6;
   %
   % vertical space between blocks
-  \blockVSpace = 0.2;
+  \blockVSpace = 0.28;
   %
   % height of coarse sweep blocks
-  \coarseHeight = 0.9;
+  \coarseHeight = 0.6;
   %
   % height of fine sweep blocks
-  \fineHeight = 2.1;
+  \fineHeight = 2.4;
   %
   % spacing between y-axis and pfasst drawing
   \axisHSpace = 0.2;
@@ -54,7 +54,7 @@
   \braceAmplitude = 3;
   %
   % offset between brace and label
-  \braceLabelOffset = 2.5;
+  \braceLabelOffset = 1;
   %
   % width of blocks in the legend
   \legendBlockWidth  = 1.3;
@@ -69,7 +69,7 @@
   \legendBlockVSpace = 1.8;
   %
   % horizontal space between drawing and legend
-  \legendHSpace = 1.5;
+  \legendHSpace = 2.7;
   %
   % max width of a legend label
   \legendLabelWidth = 3;
@@ -83,8 +83,8 @@
 %%%%%%%%%%%%%%%%%
 % Define colors %
 %%%%%%%%%%%%%%%%%
-\definecolor{pfasstCoarseColor}{RGB}{175,90,80}
-\definecolor{pfasstFineColor}{RGB}{110,159,189}
+\definecolor{pfasstCoarseColor}{RGB}{110,159,189}
+\definecolor{pfasstFineColor}{RGB}{175,90,80}
 \definecolor{pfasstTextColor}{RGB}{70,70,70}
 \definecolor{pfasstCoarseCommColor}{RGB}{80,80,80}
 \definecolor{pfasstFineCommColor}{RGB}{125,150,110}
@@ -96,29 +96,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % draw functions for elements (blocks, lines, ...) %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\tikzmath{
+\tikzmath{%
   % specify how coarse sweep blocks are drawn
-  function drawCoarseSweep(\xa, \ya, \xb, \yb) {
+  function drawCoarseSweep(\xa, \ya, \xb, \yb) {%
       { \fill[fill=pfasstCoarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how fine sweep blocks are drawn
-  function drawFineSweep(\xa, \ya, \xb, \yb) {
+  function drawFineSweep(\xa, \ya, \xb, \yb) {%
       { \fill[fill=pfasstFineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how ghost blocks are drawn
-  function drawGhost(\xa, \ya, \xb, \yb) {
+  function drawGhost(\xa, \ya, \xb, \yb) {%
       { \draw[thick,dotted,pfasstGhostColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how axes are drawn
-  function drawAxis(\xa, \ya, \xb, \yb) {
+  function drawAxis(\xa, \ya, \xb, \yb) {%
       { \draw[->,>=latex,thick,pfasstTextColor] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   % draw a label tick for a processor
-  function drawProcTick(\x, \proc) {
+  function drawProcTick(\x, \proc) {%
       \tmp = -\axisVSpace-\ticksLength;
       { \draw[pfasstTextColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
       \tmp = -\ticksLength-\ticksOffset;
@@ -170,7 +170,7 @@
       { \draw[decorate,decoration={brace,mirror,amplitude=\braceAmplitude},thick,pfasstHighlightColor] (\xa em,\ya em) -- (\xb em,\yb em); };
       \y = (\ya+\yb)/2;
       \tmp = \xa+\braceLabelOffset;
-      { \node[text=pfasstHighlightColor, font=\normalsize] at (\tmp em,\y em){predictor}; };
+      { \node[text=pfasstHighlightColor, font=\normalsize, rotate=90] at (\tmp em,\y em){\small predictor}; };
   };
 }
 
@@ -420,25 +420,25 @@
       { \fill[pfasstCoarseColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Sweep}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {\small Coarse Sweep}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
       { \fill[pfasstFineColor] (\xa em, \ya em) rectangle (\xb em, \yb em); };
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Sweep}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {\small Fine Sweep}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
       drawCoarseComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Coarse Comm}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {\small Coarse Comm}; };
       \ya = \ya-\legendBlockHeight-\legendBlockVSpace;
       \yb = \yb-\legendBlockHeight-\legendBlockVSpace;
       drawFineComm(\xa, (\ya+\yb)/2, \xb, (\ya+\yb)/2);
       \xl = \xb+\legendBlockHSpace;
       \yl = (\ya+\yb)/2;
-      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {Fine Comm}; };
+      { \node[text=pfasstTextColor, align=left,text width=\legendLabelWidth em] at (\xl em,\yl em) {\small Fine Comm}; };
   };
 }
 
