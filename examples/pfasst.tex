@@ -7,12 +7,17 @@
     \tikzmath{
       \blockVSpace = 0.35;
       legend(3);
-      predict(\unused);
       drawAxes(3);
+      predict(\unused);
       pfasstStep(0);
       pfasstStep(1);
       pfasstStepFine(2);
+      coarseSweep(0,3,3);
+      coarseSweep(1,4,3);
+      coarseSweep(2,5,3);
       highlightPredictor(\unused);
+      partialFineSweep(0,4,3,1.5);
+      partialFineSweep(1,5,3,1.5-\coarseHeight-\blockVSpace);
     }
   \end{tikzpicture}
 \end{document}

@@ -1,7 +1,11 @@
 % Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
-\usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{fadings}
+\usetikzlibrary{math}
+
+% declare fading for later use
+\tikzfading[name=pfasstFading, top color=transparent!0, bottom color=transparent!100]
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -289,6 +293,26 @@
       \xb = blockX2(\proc);
       \ya = blockY(\nCoarse, \nFine);
       \yb = \ya+\fineHeight;
+      drawFineSweep(\xa, \ya, \xb, \yb);
+      if \drawComm == 1 then {
+          if \proc > 0 then {
+              if \nFine > 0 then {
+                  \xa = blockX2(\proc-1);
+                  \ya = blockY(\nCoarse-2, \nFine-1)+\fineHeight;
+                  \xb = blockX1(\proc);
+                  \yb = blockY(\nCoarse, \nFine);
+                  drawFineComm(\xa, \ya, \xb, \yb);
+              };
+          };
+      };
+  };
+  %
+  %
+  function partialFineSweep(\proc, \nCoarse, \nFine, \height) {
+      \xa = blockX1(\proc);
+      \xb = blockX2(\proc);
+      \ya = blockY(\nCoarse, \nFine);
+      \yb = \ya+\height;
       drawFineSweep(\xa, \ya, \xb, \yb);
       if \drawComm == 1 then {
           if \proc > 0 then {
