@@ -35,8 +35,11 @@
   % length of ticks
   \ticksLength = 0.4;
   %
-  % offset for ticks labels
-  \ticksOffset = 0.8;
+  % offset for processor ticks labels
+  \processorTicksOffset = 1.2;
+  %
+  % offset for time ticks labels
+  \timeTicksOffset = 0.8;
   %
   % if drawComm == 1 the arrows for communication will be drawn
   \drawComm = 1;
@@ -119,9 +122,10 @@
   %
   % draw a label tick for a processor
   function drawProcTick(\x, \proc) {%
-      \tmp = -\axisVSpace-\ticksLength;
-      { \draw[pfasstTextColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
-      \tmp = -\ticksLength-\ticksOffset;
+      % Enable these lines to have ticks for the processors
+      % \tmp = -\axisVSpace-\ticksLength;
+      % { \draw[pfasstTextColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
+      \tmp = -\ticksLength-\processorTicksOffset;
       { \node[text=pfasstTextColor,font=\normalsize] at (\x em,\tmp em) {$P_{\pgfmathprintnumber{\proc}}$}; };
   };
   %
@@ -129,7 +133,7 @@
   function drawTimeTick(\x, \i) {
       \tmp = -\axisVSpace-\ticksLength;
       { \draw[pfasstHighlightColor] (\x em,-\axisVSpace em) -- (\x em,\tmp em); };
-      \tmp = -\ticksLength-\ticksOffset;
+      \tmp = -\ticksLength-\timeTicksOffset;
       { \node[text=pfasstHighlightColor] at (\x em,\tmp em) {$t_{\pgfmathprintnumber{\i}}$}; };
   };
   %
@@ -155,8 +159,8 @@
   %
   % label the y axis
   function labelYAxis(\pfasstSteps) {
-      \y = getPfasstHeight(-\ticksOffset, \pfasstSteps)/2;
-      \tmp = getTimeTickX(0)-\axisHSpace-\ticksOffset;
+      \y = getPfasstHeight(-\timeTicksOffset, \pfasstSteps)/2;
+      \tmp = getTimeTickX(0)-\axisHSpace-\timeTicksOffset;
       { \node[text=pfasstTextColor, rotate=90, font=\normalsize] at (\tmp em, \y em) { computation time }; };
   };
   %
