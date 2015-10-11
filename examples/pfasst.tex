@@ -1,9 +1,11 @@
 \documentclass[tikz]{standalone}
 
 \input{../pfasst-tikz.tex}
+\usetikzlibrary{fadings}
 
 \begin{document}
   \begin{tikzpicture}
+    \tikzfading[name=fade top, top color=transparent!0, bottom color=transparent!100]
     \tikzmath{
       \blockVSpace = 0.35;
       legend(3);
@@ -19,5 +21,6 @@
       partialFineSweep(0,4,3,1.5);
       partialFineSweep(1,5,3,1.5-\coarseHeight-\blockVSpace);
     }
+    \fill[white,path fading=fade top] (-0.1em,13.64em) rectangle (18.9em,11em);
   \end{tikzpicture}
 \end{document}

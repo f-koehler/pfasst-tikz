@@ -1,11 +1,7 @@
 % Copyright © 2015 Fabian Köhler <fkoehler1024@googlemail.com>
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
-\usetikzlibrary{fadings}
 \usetikzlibrary{math}
-
-% declare fading for later use
-\tikzfading[name=pfasstFading, top color=transparent!0, bottom color=transparent!100]
 
 %%%%%%%%%%%%%%%%%
 % Configuration %
@@ -105,27 +101,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tikzmath{%
   % specify how coarse sweep blocks are drawn
-  function drawCoarseSweep(\xa, \ya, \xb, \yb) {%
+  function drawCoarseSweep(\xa, \ya, \xb, \yb) {
       { \fill[fill=pfasstCoarseColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how fine sweep blocks are drawn
-  function drawFineSweep(\xa, \ya, \xb, \yb) {%
+  function drawFineSweep(\xa, \ya, \xb, \yb) {
       { \fill[fill=pfasstFineColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how ghost blocks are drawn
-  function drawGhost(\xa, \ya, \xb, \yb) {%
+  function drawGhost(\xa, \ya, \xb, \yb) {
       { \draw[thick,dotted,pfasstGhostColor] (\xa em,\ya em) rectangle (\xb em,\yb em); };
   };
   %
   % specify how axes are drawn
-  function drawAxis(\xa, \ya, \xb, \yb) {%
+  function drawAxis(\xa, \ya, \xb, \yb) {
       { \draw[->,>=latex,thick,pfasstTextColor] (\xa em,\ya em) -- (\xb em,\yb em); };
   };
   %
   % draw a label tick for a processor
-  function drawProcTick(\x, \proc) {%
+  function drawProcTick(\x, \proc) {
       % Enable these lines to have ticks for the processors
       % \tmp = -\axisVSpace-\ticksLength;
       % { \draw[pfasstTextColor] (\x em, -\axisVSpace em) -- (\x em,\tmp em); };
@@ -307,7 +303,7 @@
       };
   };
   %
-  %
+  % draw only a part of a fine sweep (defined by height)
   function partialFineSweep(\proc, \nCoarse, \nFine, \height) {
       \xa = blockX1(\proc);
       \xb = blockX2(\proc);
